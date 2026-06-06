@@ -41,7 +41,7 @@ export default {
 
   api: {
     key: {
-      gemini: process.env.GEMINI_API_KEY
+      gemini: process.env.GEMINI_KEY
     }
   }
 };
@@ -52,8 +52,20 @@ Create `.env` file:
 ```env
 PAIRING_NUMBER=628xxxxxxxxxx
 OWNER_NUMBER=628xxxxxxxxxx
-GEMINI_API_KEY=your_api_key
+GEMINI_KEY=your_api_key
 ```
+
+> [!NOTE]
+> This project uses the Gemini API for AI-powered features.
+>
+> Get your Gemini API Key here:
+> https://aistudio.google.com/app/api-keys
+> Then add it to your `.env` file:
+> ```env
+> GEMINI_KEY=your_api_key_here
+
+> [!IMPORTANT]
+> 🔐 Keep your API key private and don't share with other people
 
 ## Running Bot
 
