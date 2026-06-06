@@ -33,11 +33,11 @@ import "dotenv/config";
 export default {
   pairing: {
     state: true,
-    number: process.env.PAIRING_NUMBER,
+    number: process.env.BOT,
     code: "ZELINBOT"
   },
 
-  owner: process.env.OWNER_NUMBER.split(","),
+  owner: process.env.OWNER.split(","),
 
   api: {
     key: {
@@ -50,8 +50,8 @@ export default {
 Create `.env` file:
 
 ```env
-PAIRING_NUMBER=628xxxxxxxxxx
-OWNER_NUMBER=628xxxxxxxxxx
+BOT=62xx
+OWNER=62xx
 GEMINI_KEY=your_api_key
 ```
 
