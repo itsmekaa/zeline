@@ -1,17 +1,25 @@
+import 'dotenv/config'
+
 export default {
   pairing: {
     state: true,
-    number: 62xx,
+    number: process.env.BOT,
     code: 'ZELINBOT',
     browser: ['Mac OS', 'Safari', '14.0.0'],
     auth: 'session'
   },
-  owner: ['62xxx'],
+
+  owner: process.env.OWNER
+    ? process.env.OWNER.split(',')
+    : [],
+
   prefix: ['.', '?', '!', '/'],
+
   sticker: {
     packname: 'Created by',
     author: 'Zeline bot'
   },
+
   msg: {
     wait: '[ + ] Executing command...',
     owner: '[ ! ] Access denied. Owner only.',
@@ -22,14 +30,16 @@ export default {
     private: '[ ! ] This feature is only available in private chat.',
     error: '[ x ] An unexpected error occurred.'
   },
+
   api: {
     baseUrl: {
       anabot: 'https://anabot.my.id'
     },
     key: {
-      gemini: 'KEY'
+      gemini: process.env.GEMINI_KEY
     }
   },
+
   database: 'database',
   tz: 'Asia/Jakarta'
 }
