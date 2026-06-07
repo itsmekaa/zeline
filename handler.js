@@ -8,10 +8,13 @@ export const handler = async (sock, m) => {
     if (!m.message) return
 
     const ctx = await serialize(m, sock)
-    //await sock.readMessages([m.key])
 
     await db.init(ctx)
     logger(ctx)
+
+    if (global.db.settings.autoread) {
+      await sock.readMessages([m.key])
+    }
 
     if (!ctx.command) return
 
