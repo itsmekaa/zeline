@@ -37,7 +37,8 @@ export default {
       skyzxu: 'https://skyzxu.my.id'
     },
     key: {
-      gemini: process.env.GEMINI_KEY
+      gemini: process.env.GEMINI_KEY,
+      anabot: 'freeApikey'
     }
   },
 
