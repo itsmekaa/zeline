@@ -14,16 +14,11 @@ export const run = {
       return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'ytmp4'} https://youtu.be/PrF3E-otC_E*`)
     }
 
-    const fetchJson = async (link) => {
-      const res = await fetch(link)
-      return res.json()
-    }
-
     ctx.reply(config.msg.wait)
 
     try {
-      const result = await fetchJson(
-        `https://skyzxu.my.id/api/ytmp4?url=${encodeURIComponent(text)}`
+      const result = await Func.fetchJson(
+        `${config.api.baseUrl.skyzxu}/api/ytmp4?url=${encodeURIComponent(text)}`
       )
 
       if (!result.success || !result.results) {
