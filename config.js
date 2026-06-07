@@ -33,7 +33,8 @@ export default {
 
   api: {
     baseUrl: {
-      anabot: 'https://anabot.my.id'
+      anabot: 'https://anabot.my.id',
+      skyzxu: 'https://skyzxu.my.id'
     },
     key: {
       gemini: process.env.GEMINI_KEY
