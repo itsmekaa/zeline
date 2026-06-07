@@ -2,7 +2,7 @@
 
 > Modern WhatsApp Bot built with Baileys (ESM), featuring a plugin system, hot reload, sticker support, media processing, and modular architecture.
 
-## REQUIREMENTS
+## Requirements
 
 - [x] NodeJS >= 18
 - [x] FFMPEG
