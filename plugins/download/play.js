@@ -7,15 +7,10 @@ export const run = {
       return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'play'} multo*`)
     }
 
-    const fetchJson = async (link) => {
-      const res = await fetch(link)
-      return res.json()
-    }
-
     ctx.reply(config.msg.wait)
 
     try {
-      const result = await fetchJson(`https://skyzxu.my.id/api/playmusic?query=${encodeURIComponent(text)}`)
+      const result = await Func.fetchJson(`https://skyzxu.my.id/api/playmusic?query=${encodeURIComponent(text)}`)
 
       if (!result.success || !result.results) {
         throw new Error('Not Found or API Error')
