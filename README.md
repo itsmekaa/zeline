@@ -34,7 +34,7 @@ export default {
   pairing: {
     state: true,
     number: process.env.BOT,
-    code: "ZELINBOT"
+    code: "ZELINBOT" <- custom pairing code
   },
 
   owner: process.env.OWNER.split(","),
