@@ -38,7 +38,7 @@ export const run = {
         `- duration : ${Func.toDate(metadata.duration)}\n` +
         `- views : ${Func.h2k(metadata.view_count)}\n` +
         `- likes : ${Func.h2k(metadata.like_count)}\n` +
-        `- description : ${metadata.description}`
+        `- description : ${metadata.description || ''}`
 
       await ctx.reply({
         video: { url: download.download_url },
