@@ -24,7 +24,6 @@ export const run = {
     const cap = `\`Server Information\`
 * Running On : ${process.env.USER === "root" ? "VPS" : "HOSTING (PANEL)"}
 * Cwd : ${process.cwd()}
-* Tmp Dir : ${os.tmpdir()} *( ${fs.readdirSync(os.tmpdir()).length} Files )*
 * Hostname : ${os.hostname()}
 * Node Version : ${process.version}
 
