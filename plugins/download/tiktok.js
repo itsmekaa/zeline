@@ -67,7 +67,8 @@ export const run = {
       }
 
     } catch (e) {
-      ctx.reply(e.message)
+      console.log(e.message)
+      ctx.reply(config.msg.error)
     }
   }
 }
