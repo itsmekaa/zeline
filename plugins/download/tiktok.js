@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['tiktok'],
   hidden: ['tt', 'ttdl'],
-  category: 'downloader',
+  category: 'download',
   run: async (ctx, { sock, text }) => {
 
     if (!text) {
