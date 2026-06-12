@@ -1,6 +1,6 @@
 export const run = {
   cmd: ['play'],
-  category: 'downloader',
+  category: 'download',
   run: async (ctx, { sock, text }) => {
 
     if (!text) {

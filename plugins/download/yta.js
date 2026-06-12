@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['ytmp3'],
   hidden: ['yta'],
-  category: 'downloader',
+  category: 'download',
   run: async (ctx, { text }) => {
     if (!text) {
       return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'ytmp3'} https://youtu.be/PrF3E-otC_E*`)

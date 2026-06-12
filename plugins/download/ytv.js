@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['ytmp4'],
   hidden: ['ytv'],
-  category: 'downloader',
+  category: 'download',
   run: async (ctx, { text }) => {
 
     if (!text) {
