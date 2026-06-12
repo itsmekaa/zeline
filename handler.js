@@ -3,6 +3,27 @@ import { logger } from './lib/log.js'
 import chalk from 'chalk'
 import { jidNormalizedUser } from 'baileys'
 
+if (!globalThis.cmdQueue) {
+  globalThis.cmdQueue = {
+    items: [],
+    running: false,
+    async process() {
+      if (this.running || this.items.length === 0) return
+      this.running = true
+      
+      const { task } = this.items.shift()
+      try {
+        await task()
+      } catch (e) {
+        console.error(e)
+      }
+      
+      this.running = false
+      this.process()
+    }
+  }
+}
+
 export const handler = async (sock, m) => {
   try {
     if (!m.message) return
@@ -76,14 +97,34 @@ export const handler = async (sock, m) => {
           }
         }
 
-        try {
-          await plugin.run(ctx, { sock, prefix: ctx.prefix, command: ctx.command, text: ctx.args.join(' '), args: ctx.args })
-        } catch (error) {
-          ctx.reply(config.msg.error)
+        const executeCmd = async () => {
+          try {
+            await plugin.run(ctx, { sock, prefix: ctx.prefix, command: ctx.command, text: ctx.args.join(' '), args: ctx.args })
+          } catch (error) {
+            ctx.reply(config.msg.error)
+          }
         }
+
+        if (global.db.settings.antrian) {
+          globalThis.cmdQueue.items.push({ task: executeCmd })
+          
+          const position = globalThis.cmdQueue.items.length + (globalThis.cmdQueue.running ? 1 : 0)
+          
+          const isOwnerPrivilege = plugin.settings?.owner || ctx.isOwner
+
+          if (position > 1 && !isOwnerPrivilege) {
+            ctx.reply(`[ ! ] Anda berada di antrian *#${position}*,\nMohon menunggu...`)
+          }
+
+          globalThis.cmdQueue.process()
+        } else {
+          executeCmd()
+        }
+        
         break
       }
     }
   } catch (error) {
+    console.error(error)
   }
 }
