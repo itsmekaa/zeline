@@ -3,25 +3,8 @@ import { logger } from './lib/log.js'
 import chalk from 'chalk'
 import { jidNormalizedUser } from 'baileys'
 
-if (!globalThis.cmdQueue) {
-  globalThis.cmdQueue = {
-    items: [],
-    running: false,
-    async process() {
-      if (this.running || this.items.length === 0) return
-      this.running = true
-      
-      const { task } = this.items.shift()
-      try {
-        await task()
-      } catch (e) {
-        console.error(e)
-      }
-      
-      this.running = false
-      this.process()
-    }
-  }
+if (!globalThis.cmdQueues) {
+  globalThis.cmdQueues = new Map()
 }
 
 export const handler = async (sock, m) => {
@@ -97,6 +80,29 @@ export const handler = async (sock, m) => {
           }
         }
 
+        if (!globalThis.cmdQueues.has(pluginPath)) {
+          globalThis.cmdQueues.set(pluginPath, {
+            items: [],
+            running: false,
+            async process() {
+              if (this.running || this.items.length === 0) return
+              this.running = true
+              
+              const { task } = this.items.shift()
+              try {
+                await task()
+              } catch (e) {
+                console.error(e)
+              }
+              
+              this.running = false
+              this.process()
+            }
+          })
+        }
+
+        const queue = globalThis.cmdQueues.get(pluginPath)
+
         const executeCmd = async () => {
           try {
             await plugin.run(ctx, { sock, prefix: ctx.prefix, command: ctx.command, text: ctx.args.join(' '), args: ctx.args })
@@ -106,9 +112,9 @@ export const handler = async (sock, m) => {
         }
 
         if (global.db.settings.antrian) {
-          globalThis.cmdQueue.items.push({ task: executeCmd })
+          queue.items.push({ task: executeCmd })
           
-          const position = globalThis.cmdQueue.items.length + (globalThis.cmdQueue.running ? 1 : 0)
+          const position = queue.items.length + (queue.running ? 1 : 0)
           
           const isOwnerPrivilege = plugin.settings?.owner || ctx.isOwner
 
@@ -116,7 +122,7 @@ export const handler = async (sock, m) => {
             ctx.reply(`[ ! ] Anda berada di antrian *#${position}*,\nMohon menunggu...`)
           }
 
-          globalThis.cmdQueue.process()
+          queue.process()
         } else {
           executeCmd()
         }
