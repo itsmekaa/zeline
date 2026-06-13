@@ -78,7 +78,7 @@ npm start
 Start with PM2:
 
 ```bash
-pm2 start index.js --name "zeline" && pm2 logs zeline
+pm2 start ecosystem.config.js && pm2 logs zeline
 ```
 
 ## Project Structure
@@ -112,3 +112,4 @@ export const run = {
 > This project is currently under active development.
 >
 > Features may change without notice.
+ice.
