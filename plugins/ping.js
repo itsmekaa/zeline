@@ -6,7 +6,6 @@ export const run = {
   hidden: ['p'],
   category: 'tools',
   run: async (ctx, { sock }) => {
-    const start = Date.now()
 
     const totalMem = os.totalmem()
     const freeMem = os.freemem()
@@ -19,8 +18,6 @@ export const run = {
       return (bytes / 1024).toFixed(2) + " KB"
     }
 
-    const msg = await ctx.reply("Testing latency...")
-
     const cap = `\`Server Information\`
 * Running On : ${process.env.USER === "root" ? "VPS" : "HOSTING (PANEL)"}
 * Cwd : ${process.cwd()}
@@ -28,7 +25,7 @@ export const run = {
 * Node Version : ${process.version}
 
 \`Management Server\`
-* Bot Speed : ${Date.now() - start} ms
+* Bot Speed : ${Date.now() - ctx.timestamps} ms
 * Uptime Bot : ${Func.toDate(process.uptime())}
 * Uptime Server : ${Func.toDate(os.uptime())}
 * Memory : ${formatSize(usedMem)} / ${formatSize(totalMem)} (${memPercent}%)
@@ -37,9 +34,6 @@ export const run = {
 * Type : ${os.type()}
 * Arch : ${os.arch()}`
 
-    await sock.sendMessage(ctx.chat, {
-      text: cap,
-      edit: msg.key
-    })
+    await ctx.reply(cap)
   }
 }
