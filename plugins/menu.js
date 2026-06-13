@@ -3,7 +3,6 @@ import moment from 'moment-timezone'
 export const run = {
   cmd: ['menu'],
   hidden: ['m'],
-  category: 'tools',
   run: async (ctx) => {
     const categories = {}
     
