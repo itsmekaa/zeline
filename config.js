@@ -34,7 +34,7 @@ export default {
   api: {
     baseUrl: {
       anabot: 'https://anabot.my.id',
-      skyzxu: 'https://skyzxu.my.id'
+      skyzxu: 'http://localhost:7121'
     },
     key: {
       gemini: process.env.GEMINI_KEY,
@@ -42,6 +42,10 @@ export default {
     }
   },
 
-  database: 'database',
+  database: {
+    url: process.env.DATABASE_URL,
+    files: 'localdb' // jika menggunakan database local (localdb.json)
+  },
+  
   tz: 'Asia/Jakarta'
 }
