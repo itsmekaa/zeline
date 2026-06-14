@@ -6,7 +6,7 @@ import configData from './config.js'
 globalThis.config = configData
 global.config = configData
 
-import { db } from './lib/database.js'
+import { db } from './lib/schema.js'
 globalThis.db = db
 global.db = db
 
