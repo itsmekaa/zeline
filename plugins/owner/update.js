@@ -1,9 +1,12 @@
 import fs from 'fs'
 import path from 'path'
+import crypto from 'crypto'
 
 const REPO = 'itsmekaa/zeline'
 const BRANCH = 'main'
 const EXCLUDE = ['.env']
+
+const sha256 = str => crypto.createHash('sha256').update(str).digest('hex')
 
 export const run = {
   cmd: ['update'],
@@ -44,9 +47,10 @@ export const run = {
         const localPath = path.resolve(process.cwd(), file.path)
 
         const localExists = fs.existsSync(localPath)
-        const localContent = localExists ? fs.readFileSync(localPath, 'utf8') : null
-
-        if (localContent === content) continue
+        if (localExists) {
+          const localContent = fs.readFileSync(localPath, 'utf8')
+          if (sha256(localContent) === sha256(content)) continue
+        }
 
         fs.mkdirSync(path.dirname(localPath), { recursive: true })
         fs.writeFileSync(localPath, content, 'utf8')
