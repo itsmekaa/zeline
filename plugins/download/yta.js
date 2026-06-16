@@ -2,13 +2,13 @@ export const run = {
   cmd: ['ytmp3'],
   hidden: ['yta'],
   category: 'download',
-  run: async (ctx, { text }) => {
+  run: async (ctx, { text, prefix, command }) => {
     if (!text) {
-      return ctx.reply(Func.usage(ctx.prefix, ctx.command, 'https://youtu.be/PrF3E-otC_E'))
+      return ctx.reply(Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E'))
     }
 
     if (!Func.validUrl(text)) {
-      return ctx.reply(Func.usage(ctx.prefix, ctx.command, 'https://youtu.be/PrF3E-otC_E'))
+      return ctx.reply(Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E'))
     }
 
     ctx.reply(config.msg.wait)
