@@ -114,7 +114,7 @@ export const run = {
   category: 'search',
   run: async (ctx, { prefix, command, sock, text }) => {
     if (!text) {
-      return ctx.reply(`# Cara penggunaan\n> ${prefix + command} wallpaper`)
+      return ctx.reply(Func.usage(prefix, command, 'wallpaper'))
     }
 
     ctx.reply(config.msg.wait)
