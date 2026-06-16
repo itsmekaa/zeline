@@ -2,16 +2,13 @@ export const run = {
   cmd: ['toimage'],
   hidden: ['toimg'],
   category: 'creativity',
-  run: async (ctx) => {
+  run: async (ctx, { prefix, command }) => {
 
     if (
       !ctx.quoted &&
       !ctx.message?.stickerMessage
     ) {
-      return ctx.reply(
-        '# Cara penggunaan\n> balas sticker dengan caption ' +
-        ctx.prefix + ctx.command
-      )
+      return ctx.reply(Func.usage(prefix, command, '(reply sticker)'))
     }
 
     try {
