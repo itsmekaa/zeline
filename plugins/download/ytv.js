@@ -2,16 +2,14 @@ export const run = {
   cmd: ['ytmp4'],
   hidden: ['ytv'],
   category: 'download',
-  run: async (ctx, { text }) => {
+  run: async (ctx, { text, prefix, command }) => {
 
     if (!text) {
-      return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'ytmp4'} https://youtu.be/PrF3E-otC_E*`)
+      return ctx.reply(Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E'))
     }
 
-    const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/i
-
-    if (!ytRegex.test(text)) {
-      return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'ytmp4'} https://youtu.be/PrF3E-otC_E*`)
+    if (!Func.validUrl(text, 'youtu.be')) {
+      return ctx.reply(Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E'))
     }
 
     ctx.reply(config.msg.wait)
