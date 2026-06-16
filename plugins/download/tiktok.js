@@ -2,9 +2,9 @@ export const run = {
   cmd: ['tiktok'],
   hidden: ['tt', 'ttdl'],
   category: 'download',
-  run: async (ctx, { sock, text }) => {
+  run: async (ctx, { sock, prefix, command, text }) => {
     if (!text || !Func.validUrl(text, 'tiktok.com')) {
-      return ctx.reply(Func.usage(ctx.prefix, ctx.command, 'https://vt.tiktok.com/ZSQqVxbbM/'))
+      return ctx.reply(Func.usage(prefix, command, 'https://vt.tiktok.com/ZSQqVxbbM/'))
     }
 
     ctx.reply(config.msg.wait)
