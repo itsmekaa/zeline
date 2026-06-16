@@ -3,37 +3,18 @@ export const run = {
   hidden: ['tt', 'ttdl'],
   category: 'download',
   run: async (ctx, { sock, text }) => {
-
-    if (!text) {
-      return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'tiktok'} https://vt.tiktok.com/xxxx*`)
-    }
-
-    const extractUrl = (input) => {
-      const urlRegex = /(https?:\/\/[^\s]+)/g
-      const found = input.match(urlRegex)
-      return found ? found[0] : null
-    }
-
-    const url = extractUrl(text)
-    if (!url || !url.includes("tiktok.com")) {
-      return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'tiktok'} https://vt.tiktok.com/xxxx*`)
-    }
-
-    const fetchJson = async (link) => {
-      const res = await fetch(link)
-      return res.json()
-    }
-
-    const download = async (target) => {
-      return fetchJson(`https://tikwm.com/api/?url=${encodeURIComponent(target)}`)
+    if (!text || !Func.validUrl(text, 'tiktok.com')) {
+      return ctx.reply(Func.usage(ctx.prefix, ctx.command, 'https://vt.tiktok.com/ZSQqVxbbM/'))
     }
 
     ctx.reply(config.msg.wait)
 
     try {
-      const result = await download(url)
+      const result = await Func.fetchJson(
+        `https://tikwm.com/api/?url=${encodeURIComponent(Func.extractUrl(text))}`
+      )
 
-      if (!result.data) {
+      if (!result?.data) {
         return ctx.reply(config.msg.error)
       }
 
@@ -48,9 +29,13 @@ export const run = {
         `- likes : ${Func.h2k(data.digg_count)}\n` +
         `- comment : ${Func.h2k(data.comment_count)}`
 
-      if (data.images && data.images.length) {
+      if (data.images?.length) {
         if (data.images.length > 1) {
-          await sock.sendAlbum(ctx.chat, data.images, { caption, delay: 1000, quoted: ctx })
+          await sock.sendAlbum(ctx.chat, data.images, {
+            caption,
+            delay: 1000,
+            quoted: ctx
+          })
         } else {
           await ctx.reply({
             image: { url: data.images[0] },
@@ -59,15 +44,12 @@ export const run = {
         }
       } else {
         await ctx.reply({
-          video: {
-            url: data.play
-          },
+          video: { url: data.play },
           caption
         })
       }
-
     } catch (e) {
-      console.log(e.message)
+      console.log(e)
       ctx.reply(config.msg.error)
     }
   }
