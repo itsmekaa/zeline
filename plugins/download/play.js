@@ -1,10 +1,10 @@
 export const run = {
   cmd: ['play'],
   category: 'download',
-  run: async (ctx, { sock, text }) => {
+  run: async (ctx, { sock, prefix, command, text }) => {
 
     if (!text) {
-      return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'play'} multo*`)
+      return ctx.reply(Func.usage(prefix, command, 'multo'))
     }
 
     ctx.reply(config.msg.wait)
