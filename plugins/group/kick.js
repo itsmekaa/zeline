@@ -5,7 +5,7 @@ export const run = {
     admin: true,
     group: true
   },
-  run: async (ctx, { sock, text }) => {
+  run: async (ctx, { sock, prefix, command, text }) => {
     let targets = ctx.message?.extendedTextMessage?.contextInfo?.mentionedJid || ctx.mentionedJid || [];
 
     if (targets.length === 0 && ctx.quoted) {
@@ -20,7 +20,7 @@ export const run = {
     }
 
     if (targets.length === 0) {
-      return ctx.reply(`# Cara penggunaan\n> ${ctx.prefix + ctx.command} @someone`);
+      return ctx.reply(Func.usage(prefix, command, '@someone'));
     }
 
     const result = await sock.groupParticipantsUpdate(ctx.chat, targets, 'remove');
