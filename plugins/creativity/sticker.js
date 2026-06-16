@@ -1,9 +1,10 @@
+import sharp from 'sharp'
+
 export const run = {
   cmd: ['sticker'],
   hidden: ['stiker', 's', 'wm'],
   category: 'creativity',
   run: async (ctx) => {
-
     if (
       !ctx.quoted &&
       !ctx.message?.imageMessage &&
@@ -42,7 +43,14 @@ export const run = {
         }
       }
 
-      const buffer = await msg.download()
+      let buffer = await msg.download()
+
+      if (/image/.test(mime)) {
+        buffer = await sharp(buffer)
+          .resize(512, 512, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+          .webp()
+          .toBuffer()
+      }
 
       const media = {
         data: buffer,
@@ -56,7 +64,6 @@ export const run = {
       })
 
       await ctx.reply({ sticker: buf })
-
     } catch (e) {
       console.log(e.message)
       ctx.reply(config.msg.error)
