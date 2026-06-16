@@ -4,13 +4,11 @@ export const run = {
   category: 'download',
   run: async (ctx, { text }) => {
     if (!text) {
-      return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'ytmp3'} https://youtu.be/PrF3E-otC_E*`)
+      return ctx.reply(Func.usage(ctx.prefix, ctx.command, 'https://youtu.be/PrF3E-otC_E'))
     }
 
-    const ytRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/i
-
-    if (!ytRegex.test(text)) {
-      return ctx.reply(`# Cara penggunaan\n> *${ctx.prefix + 'ytmp3'} https://youtu.be/PrF3E-otC_E*`)
+    if (!Func.validUrl(text)) {
+      return ctx.reply(Func.usage(ctx.prefix, ctx.command, 'https://youtu.be/PrF3E-otC_E'))
     }
 
     ctx.reply(config.msg.wait)
