@@ -34,7 +34,7 @@ export default {
   api: {
     baseUrl: {
       anabot: 'https://anabot.my.id',
-      skyzxu: 'http://localhost:7121'
+      skyzxu: 'http://skyzxu.my.id'
     },
     key: {
       gemini: process.env.GEMINI_KEY,
