@@ -6,7 +6,7 @@ export const run = {
   hidden: ['ai'],
   category: 'ai',
   run: async (ctx, { text }) => {
-    if (!text) return ctx.reply(`# Cara penggunaan\n> ${ctx.prefix + ctx.command} halo`)
+    if (!text) return ctx.reply(Func.usage(ctx.prefix, ctx.command, 'halo'))
     
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${config.api.key.gemini}`
