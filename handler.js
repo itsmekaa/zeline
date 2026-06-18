@@ -71,7 +71,7 @@ export const handler = async (sock, m) => {
 
             ctx.isBotAdmin = botIds.some(id => admins.includes(id))
 
-            if (plugin.settings.admin && !ctx.isAdmin && !ctx.isOwner) {
+            if (plugin.settings.admin && !ctx.isAdmin) {
               return ctx.reply(config.msg.admin)
             }
             if (plugin.settings.botAdmin && !ctx.isBotAdmin) {
