@@ -3,6 +3,7 @@ export const run = {
   category: 'group',
   settings: {
     admin: true,
+    botAdmin: true,
     group: true
   },
   run: async (ctx, { sock, prefix, command, text }) => {
