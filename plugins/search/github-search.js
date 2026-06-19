@@ -1,11 +1,12 @@
 import axios from 'axios'
 
-global.db.githubSearch ??= {}
+db.event ??= {}
+db.event.githubSearch ??= {}
 
 export const run = {
   cmd: ['githubsearch'],
   hidden: ['ghs'],
-  category: 'search',
+  category: 'tools',
   run: async (ctx, { text, command, prefix }) => {
     try {
       if (!text) {
@@ -20,7 +21,7 @@ export const run = {
         return ctx.reply('Repository tidak ditemukan')
       }
 
-      global.db.githubSearch[ctx.sender] = {
+      db.event.githubSearch[ctx.sender] = {
         repos: data.items,
         expired: Date.now() + 60000
       }
