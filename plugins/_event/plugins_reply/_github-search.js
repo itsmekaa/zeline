@@ -1,14 +1,14 @@
-global.db.githubSearch ??= {}
+global.db.event.githubSearch ??= {}
 
 export const run = {
   event: async (ctx, { sock }) => {
     if (!ctx.text) return false
 
-    const session = global.db.githubSearch?.[ctx.sender]
+    const session = global.db.event.githubSearch?.[ctx.sender]
     if (!session) return false
 
     if (Date.now() > session.expired) {
-      delete global.db.githubSearch[ctx.sender]
+      delete global.db.event.githubSearch[ctx.sender]
       return false
     }
 
