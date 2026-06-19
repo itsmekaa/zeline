@@ -6,7 +6,7 @@ db.event.githubSearch ??= {}
 export const run = {
   cmd: ['githubsearch'],
   hidden: ['ghs'],
-  category: 'tools',
+  category: 'search',
   run: async (ctx, { text, command, prefix }) => {
     try {
       if (!text) {
