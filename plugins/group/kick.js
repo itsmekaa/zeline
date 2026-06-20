@@ -25,6 +25,6 @@ export const run = {
     }
 
     const result = await sock.groupParticipantsUpdate(ctx.chat, targets, 'remove');
-    ctx.reply(JSON.stringify(result, null, 2));
+    //ctx.reply(JSON.stringify(result, null, 2));
   }
 }
