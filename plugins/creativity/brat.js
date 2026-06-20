@@ -13,8 +13,6 @@ export const run = {
     const input = text || ctx.quoted?.text
     if (!input) return ctx.reply(usage)
 
-    await ctx.reply(config.msg.wait)
-
     try {
       const flags = {
         animated: /--animated/i.test(input),
