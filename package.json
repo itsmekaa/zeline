@@ -1,5 +1,5 @@
 {
-  "name": "zeline-base",
+  "name": "zeline",
   "version": "1.0.0",
   "description": "Modern WhatsApp Bot using Baileys (ESM) with feature-rich automation, media processing, and plugin system",
   "main": "index.js",
