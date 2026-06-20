@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Cave of Flames",
+    "element": "Pyro",
+    "reward": ["iron", "gold"],
+    "min": 80,
+    "max": 160
+  },
+  {
+    "name": "Frozen Abyss",
+    "element": "Cryo",
+    "reward": ["fish", "potion"],
+    "min": 70,
+    "max": 150
+  },
+  {
+    "name": "Thunder Ruins",
+    "element": "Electro",
+    "reward": ["stone", "gold"],
+    "min": 90,
+    "max": 180
+  }
+]
