@@ -1,0 +1,5 @@
+[
+  { "nama": "Goblin", "hp": 50, "minExp": 15, "maxExp": 30, "minGold": 20, "maxGold": 50, "damage": 8 },
+  { "nama": "Slime", "hp": 30, "minExp": 10, "maxExp": 20, "minGold": 10, "maxGold": 30, "damage": 5 },
+  { "nama": "Orc", "hp": 100, "minExp": 40, "maxExp": 80, "minGold": 60, "maxGold": 120, "damage": 18 }
+]
