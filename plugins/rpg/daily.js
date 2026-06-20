@@ -9,8 +9,10 @@ export const run = {
     const u = db.users[ctx.sender].rpg;
     const now = Date.now();
 
-    if (u.lastDaily && now - u.lastDaily < 86400000) {
-      return ctx.reply(`Cooldown : *[ ${Func.toDate(Math.floor((86400000 - (now - u.lastDaily)) / 1000))} ]*`);
+    if (u.cooldown.daily && now - u.cooldown.daily < 86400000) {
+      return ctx.reply(
+        `Cooldown : *[ ${Func.toDate(Math.floor((86400000 - (now - u.cooldown.daily)) / 1000))} ]*`
+      );
     }
 
     const r = rewards.daily;
@@ -22,7 +24,7 @@ export const run = {
       item += `\n📦 ${r.items[i]} ${i}`;
     }
 
-    u.lastDaily = now;
+    u.cooldown.daily = now;
 
     return ctx.reply(`*🎁 DAILY REWARD 🎁*\n💰 *${r.gold} Gold*${item}`);
   }
