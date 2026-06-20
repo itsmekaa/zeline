@@ -20,38 +20,6 @@ export const handler = async (sock, m) => {
       await sock.readMessages([m.key])
     }
 
-    if (ctx.isGroup) {
-      const metadata = await sock.groupMetadata(ctx.chat).catch(() => null)
-      if (metadata) {
-        const admins = []
-        for (const p of metadata.participants) {
-          if (p.admin) {
-            if (p.id) admins.push(jidNormalizedUser(p.id))
-            if (p.phoneNumber) admins.push(jidNormalizedUser(p.phoneNumber))
-          }
-        }
-
-        const senderIds = [
-          ctx.sender,
-          m.key.participant ? jidNormalizedUser(m.key.participant) : null,
-          m.key.participantAlt ? jidNormalizedUser(m.key.participantAlt) : null
-        ].filter(Boolean)
-
-        ctx.isAdmin = senderIds.some(id => admins.includes(id)) || ctx.isOwner
-
-        const botIdNormalized = sock.user?.id ? jidNormalizedUser(sock.user.id) : ''
-        const botNumberJid = config.botnumber ? `${config.botnumber}@s.whatsapp.net` : ''
-        const botIds = [
-          botIdNormalized,
-          botIdNormalized.split('@')[0] + '@s.whatsapp.net',
-          botIdNormalized.split('@')[0] + '@lid',
-          botNumberJid
-        ].filter(Boolean)
-
-        ctx.isBotAdmin = botIds.some(id => admins.includes(id))
-      }
-    }
-
     for (const [pluginPath, plugin] of globalThis.plugins.entries()) {
       if (plugin && typeof plugin.event === 'function') {
         const isStop = await plugin.event(ctx, { sock })
@@ -86,14 +54,12 @@ export const handler = async (sock, m) => {
             async process() {
               if (this.running || this.items.length === 0) return
               this.running = true
-              
               const { task } = this.items.shift()
               try {
                 await task()
               } catch (e) {
                 console.error(e)
               }
-              
               this.running = false
               this.process()
             }
@@ -112,7 +78,7 @@ export const handler = async (sock, m) => {
 
         if (global.db.settings.antrian) {
           queue.items.push({ task: executeCmd })
-          
+
           const position = queue.items.length + (queue.running ? 1 : 0)
           const isOwnerPrivilege = plugin?.settings?.owner || ctx.isOwner
 
@@ -124,7 +90,7 @@ export const handler = async (sock, m) => {
         } else {
           executeCmd()
         }
-        
+
         break
       }
     }
