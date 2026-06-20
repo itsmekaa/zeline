@@ -33,9 +33,9 @@ export const run = {
 `*⚔️ PETUALANGAN RPG ⚔️*
 Kamu bertemu dengan *${m.nama}*!
 
-🟢 *Mendapat:* +${exp} EXP & +${gold} Gold
-🔴 *Terluka:* -${dmg} HP
-❤️ *Sisa HP:* ${u.hp}/100${msg}`
+🟢 Mendapat : +${exp} EXP & +${gold} Gold
+🔴 Terluka : -${dmg} HP
+❤️ Sisa HP : ${u.hp}/100${msg}`
     );
   }
 };
