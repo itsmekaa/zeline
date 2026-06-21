@@ -30,7 +30,7 @@ export const run = {
       const { data: result } = await axios.get(api)
 
       if (!result.success || !result.data?.result) {
-        return ctx.reply(JSON.stringify(result, null, 2))
+        return ctx.reply(config.msg.error)
       }
 
       await ctx.reply({ image: { url: result.data.result } })
