@@ -4,33 +4,33 @@ export const run = {
   cmd: ['sticker'],
   hidden: ['stiker', 's', 'wm'],
   category: 'creativity',
-  run: async (ctx) => {
+  run: async (m, { prefix, command }) => {
     if (
-      !ctx.quoted &&
-      !ctx.message?.imageMessage &&
-      !ctx.message?.videoMessage &&
-      !ctx.message?.stickerMessage
+      !m.quoted &&
+      !m.message?.imageMessage &&
+      !m.message?.videoMessage &&
+      !m.message?.stickerMessage
     ) {
-      return ctx.reply(
+      return m.reply(
         '# Cara penggunaan\n> *buat sticker :* kirim atau balas foto/video/sticker dengan caption ' +
-        ctx.prefix + ctx.command +
+        prefix + command +
         '\n\n> *ubah watermark :* kirim atau balas foto/video/sticker dengan caption ' +
-        ctx.prefix + ctx.command + ' text1 | text2'
+        prefix + command + ' text1 | text2'
       )
     }
 
     try {
-      const msg = ctx.quoted ? ctx.quoted : ctx
+      const msg = m.quoted ? m.quoted : m
       const mime = msg.type || ''
 
       if (!/image|video|sticker/.test(mime)) {
-        return ctx.reply('❌ Hanya support gambar, video, atau sticker!')
+        return m.reply('❌ Hanya support gambar, video, atau sticker!')
       }
 
       let packname = config.sticker?.packname || ''
       let author = config.sticker?.author || ''
 
-      const text = ctx.text.replace(ctx.prefix + ctx.command, '').trim()
+      const text = m.text.replace(prefix + command, '').trim()
 
       if (text) {
         if (text.includes('|')) {
@@ -63,10 +63,10 @@ export const run = {
         packPublish: author
       })
 
-      await ctx.reply({ sticker: buf })
+      await m.reply({ sticker: buf })
     } catch (e) {
       console.log(e.message)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }
