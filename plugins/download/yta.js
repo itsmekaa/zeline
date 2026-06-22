@@ -2,12 +2,12 @@ export const run = {
   cmd: ['ytmp3'],
   hidden: ['yta'],
   category: 'download',
-  run: async (ctx, { text, prefix, command }) => {
+  run: async (m, { text, prefix, command }) => {
     if (!text || !Func.validUrl(text, 'youtu.be')) {
-      return ctx.reply(Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E'))
+      return m.reply(Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E'))
     }
 
-    ctx.reply(config.msg.wait)
+    m.reply(config.msg.wait)
 
     try {
       const result = await Func.fetchJson(
@@ -15,13 +15,13 @@ export const run = {
       )
 
       if (!result.success || !result.results) {
-        return ctx.reply(Func.jsonFormat(result))
+        return m.reply(Func.jsonFormat(result))
       }
 
       const { metadata, download } = result.results
 
       if (metadata.duration > 3600) {
-        return ctx.reply('❌ Durasi audio lebih dari 60 menit.')
+        return m.reply('❌ Durasi audio lebih dari 60 menit.')
       }
 
       const caption =
@@ -33,12 +33,12 @@ export const run = {
         `- likes : ${Func.h2k(metadata.like_count)}\n` +
         `- description : ${metadata.description || ''}`
 
-      await ctx.reply({
+      await m.reply({
         image: { url: metadata.thumbnail },
         caption
       })
 
-      await ctx.reply({
+      await m.reply({
         audio: { url: download.download_url },
         mimetype: 'audio/mpeg',
         caption
@@ -46,7 +46,7 @@ export const run = {
 
     } catch (e) {
       console.log(e.message)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }
