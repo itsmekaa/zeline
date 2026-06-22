@@ -1,13 +1,13 @@
 export const run = {
   cmd: ['play'],
   category: 'download',
-  run: async (ctx, { sock, prefix, command, text }) => {
+  run: async (m, { sock, prefix, command, text }) => {
 
     if (!text) {
-      return ctx.reply(Func.usage(prefix, command, 'multo'))
+      return m.reply(Func.usage(prefix, command, 'multo'))
     }
 
-    ctx.reply(config.msg.wait)
+    m.reply(config.msg.wait)
 
     try {
       const result = await Func.fetchJson(`${config.api.baseUrl.skyzxu}/api/playmusic?query=${encodeURIComponent(text)}`)
@@ -28,12 +28,12 @@ export const run = {
         `- likes : ${Func.h2k(metadata.like_count)}\n` +
         `- size : ${fileSizeMB} MB`
 
-      await ctx.reply({
+      await m.reply({
         image: { url: metadata.thumbnail },
         caption
       })
 
-      await ctx.reply({
+      await m.reply({
         audio: { url: download.download_url },
         mimetype: 'audio/mpeg',
         fileName: `${metadata.title}.mp3`,
@@ -42,7 +42,7 @@ export const run = {
 
     } catch (e) {
       console.log(e.message)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }
