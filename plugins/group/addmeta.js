@@ -5,12 +5,12 @@ export const run = {
     admin: true,
     group: true
   },
-  run: async (ctx, { sock }) => {
+  run: async (m, { sock }) => {
     const result = await sock.groupParticipantsUpdate(
-      ctx.chat,
+      m.chat,
       ["867051314767696@bot"],
       "add"
     )
-    ctx.reply(JSON.stringify(result, null, 2))
+    m.reply(JSON.stringify(result, null, 2))
   }
 }
