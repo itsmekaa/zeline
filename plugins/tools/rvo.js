@@ -2,11 +2,11 @@ export const run = {
   cmd: ['rvo'],
   hidden: ['vv'],
   category: 'tools',
-  run: async (ctx, { prefix, command }) => {
-    const q = ctx.quoted
+  run: async (m, { prefix, command }) => {
+    const q = m.quoted
 
     if (!q?.message) {
-      return ctx.reply(Func.usage(prefix, command, '(reply view once)'))
+      return m.reply(Func.usage(prefix, command, '(reply view once)'))
     }
 
     const inner = q.message
@@ -16,22 +16,22 @@ export const run = {
       inner.audioMessage
 
     if (!msg || msg.viewOnce !== true) {
-      return ctx.reply('Mimetype not supported!')
+      return m.reply('Mimetype not supported!')
     }
 
     try {
       const buffer = await q.download()
 
       if (inner.videoMessage) {
-        await ctx.reply({ video: buffer })
+        await m.reply({ video: buffer })
       } else if (inner.imageMessage) {
-        await ctx.reply({ image: buffer })
+        await m.reply({ image: buffer })
       } else if (inner.audioMessage) {
-        await ctx.reply({ audio: buffer })
+        await m.reply({ audio: buffer })
       }
     } catch (e) {
       console.log(e.message)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }
