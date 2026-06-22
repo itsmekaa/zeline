@@ -112,17 +112,17 @@ export const run = {
   cmd: ['pinterest'],
   hidden: ['pin', 'pins'],
   category: 'search',
-  run: async (ctx, { prefix, command, sock, text }) => {
+  run: async (m, { prefix, command, sock, text }) => {
     if (!text) {
-      return ctx.reply(Func.usage(prefix, command, 'wallpaper'))
+      return m.reply(Func.usage(prefix, command, 'wallpaper'))
     }
 
-    ctx.reply(config.msg.wait)
+    m.reply(config.msg.wait)
 
     try {
       const results = await PinterestService.search(text)
       if (!results || results.length === 0) {
-        return ctx.reply('Tidak ada hasil ditemukan.')
+        return m.reply('Tidak ada hasil ditemukan.')
       }
 
       const images = results.slice(0, 4).map((item) => item.image)
@@ -139,16 +139,16 @@ export const run = {
         metadata
 
       if (images.length > 1) {
-        await sock.sendAlbum(ctx.chat, images, { caption, delay: 1000, quoted: ctx })
+        await sock.sendAlbum(m.chat, images, { caption, delay: 1000, quoted: m })
       } else {
-        await ctx.reply({
+        await m.reply({
           image: { url: images[0] },
           caption
         })
       }
     } catch (e) {
       console.log(e.message)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }
