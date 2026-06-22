@@ -7,8 +7,8 @@ export const run = {
   settings: {
     owner: true
   },
-  run: async (ctx, { sock, command, text }) => {
-    if (!text) return ctx.reply('Masukkan kode JavaScript.')
+  run: async (m, { sock, command, text }) => {
+    if (!text) return m.reply('Masukkan kode JavaScript.')
     try {
       const evalCmd = (command === 'ev') 
         ? `(async () => { return ${text} })()` 
@@ -18,9 +18,9 @@ export const run = {
       if (typeof evaled !== 'string') {
         evaled = util.inspect(evaled, { depth: null, compact: false })
       }
-      await ctx.reply(String(evaled))
+      await m.reply(String(evaled))
     } catch (e) {
-      await ctx.reply(util.format(e))
+      await m.reply(util.format(e))
     }
   }
 }
