@@ -2,12 +2,12 @@ export const run = {
   cmd: ['tiktok'],
   hidden: ['tt', 'ttdl'],
   category: 'download',
-  run: async (ctx, { sock, prefix, command, text }) => {
+  run: async (m, { sock, prefix, command, text }) => {
     if (!text || !Func.validUrl(text, 'tiktok.com')) {
-      return ctx.reply(Func.usage(prefix, command, 'https://vt.tiktok.com/ZSQqVxbbM/'))
+      return m.reply(Func.usage(prefix, command, 'https://vt.tiktok.com/ZSQqVxbbM/'))
     }
 
-    ctx.reply(config.msg.wait)
+    m.reply(config.msg.wait)
 
     try {
       const result = await Func.fetchJson(
@@ -15,7 +15,7 @@ export const run = {
       )
 
       if (!result?.data) {
-        return ctx.reply(config.msg.error)
+        return m.reply(config.msg.error)
       }
 
       const data = result.data
@@ -31,26 +31,26 @@ export const run = {
 
       if (data.images?.length) {
         if (data.images.length > 1) {
-          await sock.sendAlbum(ctx.chat, data.images, {
+          await sock.sendAlbum(m.chat, data.images, {
             caption,
             delay: 1000,
-            quoted: ctx
+            quoted: m
           })
         } else {
-          await ctx.reply({
+          await m.reply({
             image: { url: data.images[0] },
             caption
           })
         }
       } else {
-        await ctx.reply({
+        await m.reply({
           video: { url: data.play },
           caption
         })
       }
     } catch (e) {
       console.log(e)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }

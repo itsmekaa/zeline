@@ -102,8 +102,8 @@ zeline/
 export const run = {
   cmd: ["ping"],
   category: "main",
-  run: async (ctx, { sock }) => {
-    await ctx.reply("pong!!!");
+  run: async (m, { sock }) => {
+    await m.reply("pong!!!");
   }
 };
 ```
@@ -112,4 +112,3 @@ export const run = {
 > This project is currently under active development.
 >
 > Features may change without notice.
-ce.

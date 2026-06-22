@@ -11,39 +11,39 @@ export const handler = async (sock, m) => {
   try {
     if (!m.message) return
 
-    const ctx = await serialize(m, sock)
+    const msg = await serialize(m, sock)
 
-    await db.init(ctx)
-    logger(ctx)
+    await db.init(msg)
+    logger(msg)
 
     if (global.db.settings.autoread) {
-      await sock.readMessages([m.key])
+      await sock.readMessages([msg.key])
     }
 
     for (const [pluginPath, plugin] of globalThis.plugins.entries()) {
       if (plugin && typeof plugin.event === 'function') {
-        const isStop = await plugin.event(ctx, { sock })
+        const isStop = await plugin.event(msg, { sock })
         if (isStop) return
       }
     }
 
-    if (!ctx.command) return
+    if (!msg.command) return
 
-    if (global.db.settings.self && !ctx.isOwner) return
+    if (global.db.settings.self && !msg.isOwner) return
 
     for (const [pluginPath, plugin] of globalThis.plugins.entries()) {
-      const isCmd = plugin?.cmd && plugin.cmd.includes(ctx.command)
-      const isHidden = plugin?.hidden && plugin.hidden.includes(ctx.command)
+      const isCmd = plugin?.cmd && plugin.cmd.includes(msg.command)
+      const isHidden = plugin?.hidden && plugin.hidden.includes(msg.command)
 
       if (isCmd || isHidden) {
         if (plugin?.settings) {
-          if (plugin.settings.owner && !ctx.isOwner) return ctx.reply(config.msg.owner)
-          if (plugin.settings.group && !ctx.isGroup) return ctx.reply(config.msg.group)
-          if (plugin.settings.private && ctx.isGroup) return ctx.reply(config.msg.private)
+          if (plugin.settings.owner && !msg.isOwner) return msg.reply(config.msg.owner)
+          if (plugin.settings.group && !msg.isGroup) return msg.reply(config.msg.group)
+          if (plugin.settings.private && msg.isGroup) return msg.reply(config.msg.private)
 
-          if (ctx.isGroup) {
-            if (plugin.settings.admin && !ctx.isAdmin) return ctx.reply(config.msg.admin)
-            if (plugin.settings.botAdmin && !ctx.isBotAdmin) return ctx.reply(config.msg.botAdmin)
+          if (msg.isGroup) {
+            if (plugin.settings.admin && !msg.isAdmin) return msg.reply(config.msg.admin)
+            if (plugin.settings.botAdmin && !msg.isBotAdmin) return msg.reply(config.msg.botAdmin)
           }
         }
 
@@ -70,9 +70,15 @@ export const handler = async (sock, m) => {
 
         const executeCmd = async () => {
           try {
-            await plugin.run(ctx, { sock, prefix: ctx.prefix, command: ctx.command, text: ctx.args.join(' '), args: ctx.args })
+            await plugin.run(msg, {
+              sock,
+              prefix: msg.prefix,
+              command: msg.command,
+              text: msg.args.join(' '),
+              args: msg.args
+            })
           } catch (error) {
-            ctx.reply(config.msg.error)
+            msg.reply(config.msg.error)
           }
         }
 
@@ -80,10 +86,10 @@ export const handler = async (sock, m) => {
           queue.items.push({ task: executeCmd })
 
           const position = queue.items.length + (queue.running ? 1 : 0)
-          const isOwnerPrivilege = plugin?.settings?.owner || ctx.isOwner
+          const isOwnerPrivilege = plugin?.settings?.owner || msg.isOwner
 
           if (position > 1 && !isOwnerPrivilege) {
-            ctx.reply(`[ ! ] Anda berada di antrian *#${position}*,\nMohon menunggu...`)
+            msg.reply(`[ ! ] Anda berada di antrian *#${position}*,\nMohon menunggu...`)
           }
 
           queue.process()

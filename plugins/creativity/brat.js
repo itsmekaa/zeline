@@ -3,15 +3,15 @@ import axios from 'axios'
 export const run = {
   cmd: ['brat'],
   category: 'creativity',
-  run: async (ctx, { text }) => {
+  run: async (m, { text, prefix, command }) => {
     const usage = `# Cara penggunaan
-> ${ctx.prefix + ctx.command} hai guys
-> ${ctx.prefix + ctx.command} hai guys --image
-> ${ctx.prefix + ctx.command} hai guys --animated --sticker
-> ${ctx.prefix + ctx.command} hai guys --animated --video`
+> ${prefix + command} hai guys
+> ${prefix + command} hai guys --image
+> ${prefix + command} hai guys --animated --sticker
+> ${prefix + command} hai guys --animated --video`
 
-    const input = text || ctx.quoted?.text
-    if (!input) return ctx.reply(usage)
+    const input = text || m.quoted?.text
+    if (!input) return m.reply(usage)
 
     try {
       const flags = {
@@ -28,7 +28,7 @@ export const run = {
         .replace(/--sticker|\b-s\b/gi, '')
         .trim()
 
-      if (!cleanText) return ctx.reply(usage)
+      if (!cleanText) return m.reply(usage)
 
       const baseUrl = flags.animated
         ? 'https://skyzxu-brat.hf.space/brat-animated?text='
@@ -44,10 +44,10 @@ export const run = {
         ext: flags.animated ? 'mp4' : 'png'
       }
 
-      if (flags.image) return ctx.reply({ image: media.data })
+      if (flags.image) return m.reply({ image: media.data })
 
       if (flags.animated && flags.video) {
-        return ctx.reply({
+        return m.reply({
           video: media.data,
           mimetype: 'video/mp4'
         })
@@ -58,10 +58,10 @@ export const run = {
         packPublish: config.sticker.author
       })
 
-      return ctx.reply({ sticker: stickerBuffer })
+      return m.reply({ sticker: stickerBuffer })
     } catch (e) {
       console.log(e)
-      return ctx.reply(config.msg.error)
+      return m.reply(config.msg.error)
     }
   }
 }

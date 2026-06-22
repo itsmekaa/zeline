@@ -7,10 +7,10 @@ export const run = {
   cmd: ['githubsearch'],
   hidden: ['ghs'],
   category: 'search',
-  run: async (ctx, { text, command, prefix }) => {
+  run: async (m, { text, command, prefix }) => {
     try {
       if (!text) {
-        return ctx.reply(Func.usage(prefix, command, 'whatsapp bot'))
+        return m.reply(Func.usage(prefix, command, 'whatsapp bot'))
       }
 
       const { data } = await axios.get(
@@ -18,10 +18,10 @@ export const run = {
       )
 
       if (!data.items?.length) {
-        return ctx.reply('Repository tidak ditemukan')
+        return m.reply('Repository tidak ditemukan')
       }
 
-      db.event.githubSearch[ctx.sender] = {
+      db.event.githubSearch[m.sender] = {
         repos: data.items,
         expired: Date.now() + 60000
       }
@@ -43,10 +43,10 @@ export const run = {
 
       caption += `\n\nKirim angka 1 - ${data.items.length} untuk download repository.\nExpired dalam 1 menit.`
 
-      await ctx.reply(caption)
+      await m.reply(caption)
     } catch (e) {
       console.error(e)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }

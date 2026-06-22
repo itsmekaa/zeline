@@ -2,12 +2,12 @@ export const run = {
   cmd: ['instagram'],
   hidden: ['ig', 'igdl'],
   category: 'download',
-  run: async (ctx, { sock, prefix, command, text }) => {
+  run: async (m, { sock, prefix, command, text }) => {
     if (!text || !Func.validUrl(text, 'instagram.com')) {
-      return ctx.reply(Func.usage(prefix, command, 'https://www.instagram.com/p/xxxx'))
+      return m.reply(Func.usage(prefix, command, 'https://www.instagram.com/p/xxxx'))
     }
 
-    ctx.reply(config.msg.wait)
+    m.reply(config.msg.wait)
 
     try {
       const result = await Func.fetchJson(
@@ -15,7 +15,7 @@ export const run = {
       )
 
       if (!result?.success || !result?.data?.result?.length) {
-        return ctx.reply(config.msg.error)
+        return m.reply(config.msg.error)
       }
 
       const data = result.data.result
@@ -31,21 +31,21 @@ export const run = {
       }
 
       if (media.length > 1) {
-        await sock.sendAlbum(ctx.chat, media, {
+        await sock.sendAlbum(m.chat, media, {
           caption,
           delay: 1000,
-          quoted: ctx
+          quoted: m
         })
       } else {
         const url = media[0]
 
         if (isVideo(url)) {
-          await ctx.reply({
+          await m.reply({
             video: { url },
             caption
           })
         } else {
-          await ctx.reply({
+          await m.reply({
             image: { url },
             caption
           })
@@ -53,7 +53,7 @@ export const run = {
       }
     } catch (e) {
       console.log(e)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }

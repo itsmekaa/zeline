@@ -5,7 +5,7 @@ export const run = {
   cmd: ['ping'],
   hidden: ['p'],
   category: 'tools',
-  run: async (ctx, { sock }) => {
+  run: async (m, { sock }) => {
 
     const totalMem = os.totalmem()
     const freeMem = os.freemem()
@@ -25,7 +25,7 @@ export const run = {
 * Node Version : ${process.version}
 
 \`Management Server\`
-* Bot Speed : ${Date.now() - ctx.timestamps} ms
+* Bot Speed : ${Date.now() - m.timestamps} ms
 * Uptime Bot : ${Func.toDate(process.uptime())}
 * Uptime Server : ${Func.toDate(os.uptime())}
 * Memory : ${formatSize(usedMem)} / ${formatSize(totalMem)} (${memPercent}%)
@@ -34,6 +34,6 @@ export const run = {
 * Type : ${os.type()}
 * Arch : ${os.arch()}`
 
-    await ctx.reply(cap)
+    await m.reply(cap)
   }
 }

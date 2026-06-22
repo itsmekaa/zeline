@@ -5,12 +5,12 @@ export const run = {
   cmd: ['iqc'],
   hidden: ['iphonequoted'],
   category: 'creativity',
-  run: async (ctx, { text }) => {
+  run: async (m, { text, prefix, command }) => {
     if (!text) {
-      return ctx.reply(`# Cara penggunaan\n> ${ctx.prefix + ctx.command} kelaz kink`)
+      return m.reply(Func.usage(prefix, command, 'kelaz kink'))
     }
 
-    await ctx.reply(config.msg.wait)
+    await m.reply(config.msg.wait)
 
     try {
       const time = moment().tz(config.tz).format('HH:mm')
@@ -23,13 +23,13 @@ export const run = {
         }
       )
 
-      await ctx.reply({
+      await m.reply({
         image: Buffer.from(res.data)
       })
 
     } catch (e) {
       console.log(e.message)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }
