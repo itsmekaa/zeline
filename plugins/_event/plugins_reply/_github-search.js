@@ -3,20 +3,20 @@ db.event ??= {}
 db.event.githubSearch ??= {}
 
 export const run = {
-  event: async (ctx, { sock }) => {
-    if (!ctx.text) return false
+  event: async (m, { sock }) => {
+    if (!m.text) return false
 
-    const session = db.event.githubSearch?.[ctx.sender]
+    const session = db.event.githubSearch?.[m.sender]
     if (!session) return false
 
     if (Date.now() > session.expired) {
-      delete db.event.githubSearch[ctx.sender]
+      delete db.event.githubSearch[m.sender]
       return false
     }
 
-    if (!/^(10|[1-9])$/.test(ctx.text.trim())) return false
+    if (!/^(10|[1-9])$/.test(m.text.trim())) return false
 
-    const repo = session.repos[Number(ctx.text.trim()) - 1]
+    const repo = session.repos[Number(m.text.trim()) - 1]
 
     if (!repo) return false
 
@@ -31,7 +31,7 @@ export const run = {
     caption += `- description : ${repo.description || '-'}`
 
     await sock.sendMessage(
-      ctx.chat,
+      m.chat,
       {
         document: {
           url: zipUrl
@@ -41,7 +41,7 @@ export const run = {
         caption
       },
       {
-        quoted: ctx
+        quoted: m
       }
     )
 
