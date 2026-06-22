@@ -7,14 +7,14 @@ const domains = JSON.parse(
 export const run = {
   cmd: ['domain'],
   category: 'rpg',
-  run: async (ctx) => {
-    const u = db.users[ctx.sender].rpg
+  run: async (m) => {
+    const u = db.users[m.sender].rpg
     const now = Date.now()
 
     const remaining = u.cooldown.domain - now
     if (remaining > 0) {
       const second = Math.ceil(remaining / 1000)
-      return ctx.reply(`Cooldown : *[ ${Func.toDate(second)} ]*`)
+      return m.reply(`Cooldown : *[ ${Func.toDate(second)} ]*`)
     }
 
     const d = domains[(Math.random() * domains.length) | 0]
@@ -27,7 +27,7 @@ export const run = {
     u.inventory[item] = (u.inventory[item] || 0) + 1
     u.cooldown.domain = now + 120000
 
-    return ctx.reply(
+    return m.reply(
 `🗺️ DOMAIN CLEAR
 ${d.name} (${d.element})
 

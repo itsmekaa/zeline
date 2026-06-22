@@ -5,12 +5,12 @@ const rewards = JSON.parse(fs.readFileSync('./src/rpg/rewards.json', 'utf-8'));
 export const run = {
   cmd: ['daily'],
   category: 'rpg',
-  run: async (ctx) => {
-    const u = db.users[ctx.sender].rpg;
+  run: async (m) => {
+    const u = db.users[m.sender].rpg;
     const now = Date.now();
 
     if (u.cooldown.daily && now - u.cooldown.daily < 86400000) {
-      return ctx.reply(
+      return m.reply(
         `Cooldown : *[ ${Func.toDate(Math.floor((86400000 - (now - u.cooldown.daily)) / 1000))} ]*`
       );
     }
@@ -26,6 +26,6 @@ export const run = {
 
     u.cooldown.daily = now;
 
-    return ctx.reply(`*🎁 DAILY REWARD 🎁*\n💰 *${r.gold} Gold*${item}`);
+    return m.reply(`*🎁 DAILY REWARD 🎁*\n💰 *${r.gold} Gold*${item}`);
   }
 };

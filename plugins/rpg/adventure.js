@@ -5,10 +5,10 @@ const monsters = JSON.parse(fs.readFileSync('./src/rpg/monsters.json', 'utf-8'))
 export const run = {
   cmd: ['adventure'],
   category: 'rpg',
-  run: async (ctx) => {
-    const u = db.users[ctx.sender].rpg;
+  run: async (m) => {
+    const u = db.users[m.sender].rpg;
 
-    if (u.hp < 20) return ctx.reply(`HP terlalu rendah : *[ ${u.hp} ]*`);
+    if (u.hp < 20) return m.reply(`HP terlalu rendah : *[ ${u.hp} ]*`);
 
     const m = monsters[Math.random() * monsters.length | 0];
 
@@ -29,7 +29,7 @@ export const run = {
       msg = `\n🎉 *LEVEL UP!* Kamu sekarang level ${u.level}!`;
     }
 
-    return ctx.reply(
+    return m.reply(
 `*⚔️ PETUALANGAN RPG ⚔️*
 Kamu bertemu dengan *${m.nama}*!
 

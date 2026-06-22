@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['market'],
   category: 'rpg',
-  run: async (ctx) => {
+  run: async (m) => {
     const m = db.rpg.market
 
     const sell = m.sell.slice(0, 5).map(x =>
@@ -12,7 +12,7 @@ export const run = {
 `📈 ${x.item} x${x.qty} @ ${x.price}`
     ).join('\n') || '-'
 
-    ctx.reply(
+    m.reply(
 `🏪 MARKET
 
 📉 SELL
