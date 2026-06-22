@@ -6,11 +6,11 @@ export const run = {
     botAdmin: true,
     group: true
   },
-  run: async (ctx, { sock, prefix, command, text }) => {
-    let targets = ctx.message?.extendedTextMessage?.contextInfo?.mentionedJid || ctx.mentionedJid || [];
+  run: async (m, { sock, prefix, command, text }) => {
+    let targets = m.message?.extendedTextMessage?.contextInfo?.mentionedJid || m.mentionedJid || [];
 
-    if (targets.length === 0 && ctx.quoted) {
-      targets = [ctx.quoted.sender];
+    if (targets.length === 0 && m.quoted) {
+      targets = [m.quoted.sender];
     }
 
     if (targets.length === 0 && text) {
@@ -21,10 +21,10 @@ export const run = {
     }
 
     if (targets.length === 0) {
-      return ctx.reply(Func.usage(prefix, command, '@someone'));
+      return m.reply(Func.usage(prefix, command, '@someone'));
     }
 
-    const result = await sock.groupParticipantsUpdate(ctx.chat, targets, 'remove');
-    //ctx.reply(JSON.stringify(result, null, 2));
+    const result = await sock.groupParticipantsUpdate(m.chat, targets, 'remove');
+    //m.reply(JSON.stringify(result, null, 2));
   }
 }
