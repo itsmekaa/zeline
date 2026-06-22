@@ -5,8 +5,8 @@ export const run = {
   cmd: ['gemini'],
   hidden: ['ai'],
   category: 'ai',
-  run: async (ctx, { text }) => {
-    if (!text) return ctx.reply(Func.usage(ctx.prefix, ctx.command, 'halo'))
+  run: async (m, { text }) => {
+    if (!text) return m.reply(Func.usage(m.prefix, m.command, 'halo'))
     
     try {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${config.api.key.gemini}`
@@ -44,10 +44,10 @@ export const run = {
       })
       
       const result = data.candidates[0].content.parts[0].text
-      await ctx.reply(result.trim())
+      await m.reply(result.trim())
     } catch (error) {
       console.log(error.message)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }
