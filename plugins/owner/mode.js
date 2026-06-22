@@ -4,7 +4,7 @@ export const run = {
   settings: {
     owner: true
   },
-  run: async (ctx, { prefix, command, args }) => {
+  run: async (m, { prefix, command, args }) => {
     const validModes = Object.keys(global.db.settings)
 
     if (args.length < 1) {
@@ -13,7 +13,7 @@ export const run = {
         modeList += `- ${mode}: ${global.db.settings[mode] ? 'on' : 'off'}\n`
       }
 
-      return ctx.reply(`${modeList}\nSwitch mode:\n${prefix + command} self on`)
+      return m.reply(`${modeList}\nSwitch mode:\n${prefix + command} self on`)
     }
 
     const modeType = args[0]?.toLowerCase()
@@ -21,17 +21,17 @@ export const run = {
     const formattedMode = modeType.charAt(0).toUpperCase() + modeType.slice(1)
 
     if (!validModes.includes(modeType)) {
-      return ctx.reply(`Mode *${modeType}* not found. Available modes: *${validModes.join(', ')}*`)
+      return m.reply(`Mode *${modeType}* not found. Available modes: *${validModes.join(', ')}*`)
     }
 
     if (action === 'on') {
       global.db.settings[modeType] = true
-      return ctx.reply(`${formattedMode} Mode switched to : *[ ON ]*`)
+      return m.reply(`${formattedMode} Mode switched to : *[ ON ]*`)
     } else if (action === 'off') {
       global.db.settings[modeType] = false
-      return ctx.reply(`${formattedMode} Mode switched to : *[ OFF ]*`)
+      return m.reply(`${formattedMode} Mode switched to : *[ OFF ]*`)
     } else {
-      return ctx.reply(`Current status of *${modeType}* mode: *${global.db.settings[modeType] ? 'on' : 'off'}*\n\nChange the status by typing:\n*${prefix + command} ${modeType} on*\n*${prefix + command} ${modeType} off*`)
+      return m.reply(`Current status of *${modeType}* mode: *${global.db.settings[modeType] ? 'on' : 'off'}*\n\nChange the status by typing:\n*${prefix + command} ${modeType} on*\n*${prefix + command} ${modeType} off*`)
     }
   }
 }

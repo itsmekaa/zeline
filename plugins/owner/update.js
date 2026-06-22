@@ -15,15 +15,15 @@ export const run = {
   settings: {
     owner: true
   },
-  run: async (ctx, { sock }) => {
-    const sent = await ctx.reply('Checking for updates...')
+  run: async (m, { sock }) => {
+    const sent = await m.reply('Checking for updates...')
 
     const apiUrl = `https://api.github.com/repos/${REPO}/git/trees/${BRANCH}?recursive=1`
     const res = await fetch(apiUrl)
     const data = await res.json()
 
     if (!data.tree) {
-      await sock.sendMessage(ctx.chat, {
+      await sock.sendMessage(m.chat, {
         text: 'Failed to fetch repository tree.',
         edit: sent.key
       })
@@ -67,7 +67,7 @@ export const run = {
         msg += `\n\nFailed (${failed.length}):\n${failed.map(f => `- ${f}`).join('\n')}`
       }
 
-      await sock.sendMessage(ctx.chat, {
+      await sock.sendMessage(m.chat, {
         text: msg.trim(),
         edit: sent.key
       })
@@ -83,7 +83,7 @@ export const run = {
 
     msg += `Restarting...`
 
-    await sock.sendMessage(ctx.chat, {
+    await sock.sendMessage(m.chat, {
       text: msg.trim(),
       edit: sent.key
     })
