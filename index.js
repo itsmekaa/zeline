@@ -86,17 +86,33 @@ const startBot = async () => {
     const { version } = await fetchLatestBaileysVersion()
 
     const sock = makeWASocket({
-        version,
-        logger: pino({ level: 'silent' }),
-        printQRInTerminal: false,
-        auth: {
-            creds: state.creds,
-            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' }))
-        },
-        browser: config.pairing.browser,
-        generateHighQualityLinkPreview: true,
-        syncFullHistory: false
-    })
+      version,
+      browser: config.pairing.browser,
+      connectTimeoutMs: 60000,
+      keepAliveIntervalMs: 60000,
+      logger: pino({ level: 'silent' }),
+      printQRInTerminal: false,
+      defaultQueryTimeoutMs: 60000,
+      retryRequestDelayMs: 250,
+      maxMsgRetryCount: 5,
+      auth: {
+        creds: state.creds,
+        keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' })),
+      },
+      markOnlineOnConnect: false,
+      syncFullHistory: false,
+      patchMessageBeforeSending: (msg) => msg,
+      shouldSyncHistoryMessage: () => false,
+      shouldIgnoreJid: () => false,
+      generateHighQualityLinkPreview: true,
+      linkPreviewImageThumbnailWidth: 192,
+      enableAutoSessionRecreation: true,
+      enableRecentMessageCache: true,
+      appStateMacVerification: {
+        patch: false,
+        snapshot: false,
+      },
+    });
 
     bindSocket(sock)
 
