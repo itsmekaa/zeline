@@ -12,7 +12,7 @@ const pkg = JSON.parse(
 export const run = {
   cmd: ['menu'],
   hidden: ['m'],
-  run: async (ctx) => {
+  run: async (m) => {
     const categories = {}
 
     for (const [_, plugin] of globalThis.plugins.entries()) {
@@ -24,7 +24,7 @@ export const run = {
 
     const time = moment().tz(config.tz).format('HH:mm:ss')
 
-    let text = `Hi @${ctx.sender.split('@')[0]} !\n\n`
+    let text = `Hi @${m.sender.split('@')[0]} !\n\n`
     text += '`Bot Info`\n'
     text += `- Name : ${pkg.name}\n`
     text += `- Prefix : [ ${config.prefix.join(', ')} ]\n`
@@ -34,13 +34,13 @@ export const run = {
       text += `\`${cat}\`\n`
       text += categories[cat]
         .sort()
-        .map(cmd => `\`\`\`- ${ctx.prefix || config.prefix[0]}${cmd}\`\`\``)
+        .map(cmd => `\`\`\`- ${m.prefix || config.prefix[0]}${cmd}\`\`\``)
         .join('\n')
       text += '\n\n'
     }
 
-    await ctx.reply(text.trim(), {
-      mentions: [ctx.sender]
+    await m.reply(text.trim(), {
+      mentions: [m.sender]
     })
   }
 }
