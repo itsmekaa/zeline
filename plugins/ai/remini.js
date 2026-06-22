@@ -4,24 +4,24 @@ export const run = {
   cmd: ['remini'],
   hidden: ['upscale', 'hd'],
   category: 'ai',
-  run: async (ctx) => {
+  run: async (m, { prefix, command }) => {
 
     if (
       !(
-        ctx.type === 'imageMessage' ||
-        (ctx.quoted && ctx.quoted.type === 'imageMessage')
+        m.type === 'imageMessage' ||
+        (m.quoted && m.quoted.type === 'imageMessage')
       )
     ) {
-      return ctx.reply(`# Cara penggunaan\n> kirim / reply gambar dengan ${ctx.prefix + ctx.command}`)
+      return m.reply(Func.usage(prefix, command, '(reply / send image)'))
     }
 
-    await ctx.reply(config.msg.wait)
+    await m.reply(config.msg.wait)
 
     try {
       const media =
-        ctx.quoted && ctx.quoted.type === 'imageMessage'
-          ? ctx.quoted
-          : ctx
+        m.quoted && m.quoted.type === 'imageMessage'
+          ? m.quoted
+          : m
 
       const buffer = await media.download()
       const up = await uploader.uguu(buffer)
@@ -30,14 +30,14 @@ export const run = {
       const { data: result } = await axios.get(api)
 
       if (!result.success || !result.data?.result) {
-        return ctx.reply(config.msg.error)
+        return m.reply(config.msg.error)
       }
 
-      await ctx.reply({ image: { url: result.data.result } })
+      await m.reply({ image: { url: result.data.result } })
 
     } catch (e) {
       console.log(e.message)
-      ctx.reply(config.msg.error)
+      m.reply(config.msg.error)
     }
   }
 }
