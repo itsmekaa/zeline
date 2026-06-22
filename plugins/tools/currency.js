@@ -4,13 +4,13 @@ export const run = {
   cmd: ['currency'],
   hidden: ['cc', 'convert', 'kurs'],
   category: 'tools',
-  run: async (ctx, { sock, text }) => {
+  run: async (m, { sock, text, prefix, command }) => {
     try {
       if (!text) {
-        return ctx.reply(
+        return m.reply(
 `# Cara penggunaan
-> ${ctx.prefix + ctx.command} USD IDR 10
-> ${ctx.prefix + ctx.command} 10 USD to IDR`
+> ${prefix + command} USD IDR 10
+> ${prefix + command} 10 USD to IDR`
         )
       }
 
@@ -35,26 +35,26 @@ export const run = {
       }
 
       if (!amount || !from || !to) {
-        return ctx.reply("Format salah. Contoh: USD IDR 10 atau 10 USD to IDR")
+        return m.reply("Format salah. Contoh: USD IDR 10 atau 10 USD to IDR")
       }
 
       const res = await axios.get(`https://open.er-api.com/v6/latest/${from}`)
       const rate = res.data?.rates?.[to]
 
       if (!rate) {
-        return ctx.reply("Kode mata uang tidak ditemukan.")
+        return m.reply("Kode mata uang tidak ditemukan.")
       }
 
       const result = amount * rate
 
-      return ctx.reply(
+      return m.reply(
 `💱 Currency Converter
 ${amount} ${from} = ${result.toFixed(2)} ${to}`
       )
 
     } catch (err) {
       console.error(err.message)
-      return ctx.reply(config.msg.error)
+      return m.reply(config.msg.error)
     }
   }
 }
