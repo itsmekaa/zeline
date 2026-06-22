@@ -102,8 +102,8 @@ zeline/
 export const run = {
   cmd: ["ping"],
   category: "main",
-  run: async (ctx, { sock }) => {
-    await ctx.reply("pong!!!");
+  run: async (m, { sock }) => {
+    await m.reply("pong!!!");
   }
 };
 ```
