@@ -10,11 +10,11 @@ export const run = {
 
     if (u.hp < 20) return m.reply(`HP terlalu rendah : *[ ${u.hp} ]*`);
 
-    const m = monsters[Math.random() * monsters.length | 0];
+    const monster = monsters[Math.random() * monsters.length | 0];
 
-    const exp = (Math.random() * (m.maxExp - m.minExp + 1) | 0) + m.minExp;
-    const gold = (Math.random() * (m.maxGold - m.minGold + 1) | 0) + m.minGold;
-    const dmg = (Math.random() * m.damage | 0) + 3;
+    const exp = (Math.random() * (monster.maxExp - monster.minExp + 1) | 0) + monster.minExp;
+    const gold = (Math.random() * (monster.maxGold - monster.minGold + 1) | 0) + monster.minGold;
+    const dmg = (Math.random() * monster.damage | 0) + 3;
 
     u.exp += exp;
     u.gold += gold;
@@ -31,7 +31,7 @@ export const run = {
 
     return m.reply(
 `*⚔️ PETUALANGAN RPG ⚔️*
-Kamu bertemu dengan *${m.nama}*!
+Kamu bertemu dengan *${monster.nama}*!
 
 🟢 Mendapat : +${exp} EXP & +${gold} Gold
 🔴 Terluka : -${dmg} HP
