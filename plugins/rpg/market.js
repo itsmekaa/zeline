@@ -2,13 +2,13 @@ export const run = {
   cmd: ['market'],
   category: 'rpg',
   run: async (m) => {
-    const m = db.rpg.market
+    const market = db.rpg.market
 
-    const sell = m.sell.slice(0, 5).map(x =>
+    const sell = market.sell.slice(0, 5).map(x =>
 `📉 ${x.item} x${x.qty} @ ${x.price}`
     ).join('\n') || '-'
 
-    const buy = m.buy.slice(0, 5).map(x =>
+    const buy = market.buy.slice(0, 5).map(x =>
 `📈 ${x.item} x${x.qty} @ ${x.price}`
     ).join('\n') || '-'
 
@@ -21,7 +21,7 @@ ${sell}
 📈 BUY
 ${buy}
 
-📊 Trades : ${m.history.length}`
+📊 Trades : ${market.history.length}`
     )
   }
 }
