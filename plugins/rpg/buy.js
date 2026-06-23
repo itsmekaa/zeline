@@ -4,7 +4,7 @@ export const run = {
   run: async (m, { prefix, command }) => {
     const u = db.users[m.sender].rpg
     const [item, qty, price] = (m.text || '').split(' ')
-    const m = db.rpg.market
+    const market = db.rpg.market
 
     if (!item || !qty || !price) return m.reply(Func.usage(prefix, command, 'item qty price'))
 
@@ -13,7 +13,7 @@ export const run = {
 
     u.gold -= cost
 
-    m.buy.push({
+    market.buy.push({
       id: Date.now(),
       owner: m.sender,
       item,
