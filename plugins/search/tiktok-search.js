@@ -37,12 +37,13 @@ export const run = {
         caption += `${i + 1}.\n`
         caption += `- title : ${(v.title || '-').slice(0, 80)}\n`
         caption += `- author : ${v.author?.nickname || '-'}\n`
-        caption += `- views : ${Func.h2k(v.play_count || 0)}\n`
+        caption += `- views : ${Func.h2k(v.play_count || 0)}\n\n`
       })
 
-      caption += `\n\nKirim angka 1 - ${Math.min(videos.length, 10)} untuk download video.\nExpired dalam 1 menit.`
+      caption += `Kirim angka 1 - ${Math.min(videos.length, 10)} untuk download video.\n`
+      caption += `Expired dalam 1 menit.`
 
-      await m.reply(caption)
+      await m.reply(caption.trim())
     } catch (e) {
       console.error(e)
       m.reply(config.msg.error)
