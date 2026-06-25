@@ -32,7 +32,7 @@ export const run = {
       caption += `#> Result Metadata\n`
 
       data.items.forEach((repo, i) => {
-        caption += `\n${i + 1}.\n`
+        caption += `${i + 1}.\n`
         caption += `- repository : ${repo.full_name}\n`
         caption += `- author : ${repo.owner.login}\n`
         caption += `- stars : ${repo.stargazers_count.toLocaleString()}\n`

@@ -34,7 +34,7 @@ export const run = {
       caption += `#> Result Metadata\n`
 
       videos.slice(0, 10).forEach((v, i) => {
-        caption += `\n${i + 1}.\n`
+        caption += `${i + 1}.\n`
         caption += `- title : ${(v.title || '-').slice(0, 80)}\n`
         caption += `- author : ${v.author?.nickname || '-'}\n`
         caption += `- views : ${Func.h2k(v.play_count || 0)}\n`
