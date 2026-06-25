@@ -35,15 +35,14 @@ export const run = {
         caption += `${i + 1}.\n`
         caption += `- repository : ${repo.full_name}\n`
         caption += `- author : ${repo.owner.login}\n`
-        caption += `- stars : ${repo.stargazers_count.toLocaleString()}\n`
-        caption += `- forks : ${repo.forks_count.toLocaleString()}\n`
-        caption += `- url : ${repo.html_url}\n`
-        caption += `- description : ${repo.description || '-'}\n`
+        caption += `- stars : ${Func.h2k(repo.stargazers_count || 0)}\n`
+        caption += `- forks : ${Func.h2k(repo.forks_count || 0)}\n\n`
       })
 
-      caption += `\n\nKirim angka 1 - ${data.items.length} untuk download repository.\nExpired dalam 1 menit.`
+      caption += `Kirim angka 1 - ${data.items.length} untuk download repository.\n`
+      caption += `Expired dalam 1 menit.`
 
-      await m.reply(caption)
+      await m.reply(caption.trim())
     } catch (e) {
       console.error(e)
       m.reply(config.msg.error)
