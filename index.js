@@ -14,10 +14,6 @@ import * as uploader from './lib/uploader.js'
 globalThis.uploader = uploader
 global.uploader = uploader
 
-import * as sticker from './lib/sticker.js'
-globalThis.sticker = sticker
-global.sticker = sticker
-
 import { makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } from 'baileys'
 import pino from 'pino'
 import chalk from 'chalk'
