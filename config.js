@@ -16,8 +16,8 @@ export default {
   prefix: ['.', '?', '!', '/'],
 
   sticker: {
-    packname: 'Created by',
-    author: 'Zeline bot'
+    packname: 'zeline',
+    author: 'wabot'
   },
 
   msg: {
