@@ -1,71 +1,36 @@
-import sharp from 'sharp'
-
 export const run = {
   cmd: ['sticker'],
-  hidden: ['stiker', 's', 'wm'],
+  hidden: ['s'],
   category: 'creativity',
-  run: async (m, { prefix, command }) => {
+  run: async (m, { sock, prefix, command }) => {
     if (
       !m.quoted &&
       !m.message?.imageMessage &&
-      !m.message?.videoMessage &&
-      !m.message?.stickerMessage
+      !m.message?.videoMessage
     ) {
       return m.reply(
-        '# Cara penggunaan\n> *buat sticker :* kirim atau balas foto/video/sticker dengan caption ' +
-        prefix + command +
-        '\n\n> *ubah watermark :* kirim atau balas foto/video/sticker dengan caption ' +
-        prefix + command + ' text1 | text2'
+        Func.usage(prefix, command, '(reply / send media)')
       )
     }
 
     try {
-      const msg = m.quoted ? m.quoted : m
+      const msg = m.quoted || m
       const mime = msg.type || ''
 
-      if (!/image|video|sticker/.test(mime)) {
-        return m.reply('❌ Hanya support gambar, video, atau sticker!')
+      if (!/image|video/.test(mime)) {
+        return m.reply('Supported type : *[ image, video ]*')
       }
 
-      let packname = config.sticker?.packname || ''
-      let author = config.sticker?.author || ''
+      const media = await msg.download()
 
-      const text = m.text.replace(prefix + command, '').trim()
-
-      if (text) {
-        if (text.includes('|')) {
-          let [p, a] = text.split('|')
-          packname = p?.trim() || ''
-          author = a?.trim() || ''
-        } else {
-          packname = text.trim()
-          author = ''
-        }
-      }
-
-      let buffer = await msg.download()
-
-      if (/image/.test(mime)) {
-        buffer = await sharp(buffer)
-          .resize(512, 512, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-          .webp()
-          .toBuffer()
-      }
-
-      const media = {
-        data: buffer,
-        mimetype: mime.includes('sticker') ? 'image/webp' : mime,
-        ext: mime.includes('sticker') ? 'webp' : mime.split('/')[1]
-      }
-
-      const buf = await sticker.writeExif(media, {
-        packName: packname,
-        packPublish: author
+      await sock.sendSticker(m.chat, media, {
+        packname: config.sticker.packname || '',
+        author: config.sticker.author || '',
+        ai: true,
+        quoted: m
       })
-
-      await m.reply({ sticker: buf })
     } catch (e) {
-      console.log(e.message)
+      console.log(e)
       m.reply(config.msg.error)
     }
   }
