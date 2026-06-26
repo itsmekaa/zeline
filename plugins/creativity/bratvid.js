@@ -1,7 +1,8 @@
 import axios from 'axios'
 
 export const run = {
-  cmd: ['brat'],
+  cmd: ['bratvid'],
+  hidden: ['bratvideo'],
   category: 'creativity',
   run: async (m, { sock, text, prefix, command }) => {
     if (!text) {
@@ -10,7 +11,7 @@ export const run = {
 
     try {
       const { data: media } = await axios.get(
-        'https://skyzxu-brat.hf.space/brat?text=' +
+        'https://skyzxu-brat.hf.space/brat-animated?text=' +
           encodeURIComponent(text),
         {
           responseType: 'arraybuffer'
