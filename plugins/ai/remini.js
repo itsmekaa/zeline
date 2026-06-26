@@ -1,11 +1,8 @@
-import axios from 'axios'
-
 export const run = {
   cmd: ['remini'],
   hidden: ['upscale', 'hd'],
   category: 'ai',
   run: async (m, { prefix, command }) => {
-
     if (
       !(
         m.type === 'imageMessage' ||
@@ -24,19 +21,13 @@ export const run = {
           : m
 
       const buffer = await media.download()
-      const up = await uploader.uguu(buffer)
+      const enhanced = await scrape.enhance(buffer, 'medium')
 
-      const api = `${config.api.baseUrl.anabot}/api/ai/toEnhance?imageUrl=${encodeURIComponent(up)}&apikey=freeApikey`
-      const { data: result } = await axios.get(api)
-
-      if (!result.success || !result.data?.result) {
-        return m.reply(config.msg.error)
-      }
-
-      await m.reply({ image: { url: result.data.result } })
-
+      await m.reply({
+        image: enhanced
+      })
     } catch (e) {
-      console.log(e.message)
+      console.log(e)
       m.reply(config.msg.error)
     }
   }
