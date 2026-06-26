@@ -53,7 +53,7 @@ Create `.env` file:
 BOT=62xx
 OWNER=62xx
 GEMINI_KEY=your_api_key
-DATABASE_URL=mongodb_url # leave empty is use localdb.json
+DATABASE_URL=mongodb_url # leave empty if use localdb.json
 ```
 
 > [!NOTE]
