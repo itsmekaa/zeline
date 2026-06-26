@@ -86,13 +86,13 @@ pm2 start ecosystem.config.cjs && pm2 logs zeline
 
 ```text
 zeline/
-├── database/
 ├── lib/
 ├── plugins/
 ├── session/
 ├── config.js
 ├── handler.js
 ├── index.js
+├── localdb.json
 ├── package.json
 └── README.md
 ```
