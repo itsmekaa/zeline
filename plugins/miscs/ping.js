@@ -4,7 +4,7 @@ import fs from 'fs'
 export const run = {
   cmd: ['ping'],
   hidden: ['p'],
-  category: 'tools',
+  category: 'miscs',
   run: async (m, { sock }) => {
 
     const totalMem = os.totalmem()
