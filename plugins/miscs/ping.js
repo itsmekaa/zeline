@@ -1,5 +1,4 @@
 import os from 'os'
-import fs from 'fs'
 
 export const run = {
   cmd: ['ping'],
@@ -12,12 +11,6 @@ export const run = {
     const usedMem = totalMem - freeMem
     const memPercent = ((usedMem / totalMem) * 100).toFixed(1)
 
-    const formatSize = (bytes) => {
-      if (bytes >= 1024 * 1024 * 1024) return (bytes / 1024 / 1024 / 1024).toFixed(2) + " GB"
-      if (bytes >= 1024 * 1024) return (bytes / 1024 / 1024).toFixed(2) + " MB"
-      return (bytes / 1024).toFixed(2) + " KB"
-    }
-
     const cap = `\`Server Information\`
 * Running On : ${process.env.USER === "root" ? "VPS" : "HOSTING (PANEL)"}
 * Cwd : ${process.cwd()}
@@ -28,7 +21,7 @@ export const run = {
 * Bot Speed : ${Date.now() - m.timestamps} ms
 * Uptime Bot : ${Func.toDate(process.uptime())}
 * Uptime Server : ${Func.toDate(os.uptime())}
-* Memory : ${formatSize(usedMem)} / ${formatSize(totalMem)} (${memPercent}%)
+* Memory : ${Func.size(usedMem)} / ${Func.size(totalMem)} (${memPercent}%)
 * CPU : ${os.cpus()[0].model} ( ${os.cpus().length} CORE )
 * Release : ${os.release()}
 * Type : ${os.type()}
