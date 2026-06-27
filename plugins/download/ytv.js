@@ -3,7 +3,11 @@ export const run = {
   hidden: ['ytv'],
   category: 'download',
   run: async (m, { text, prefix, command }) => {
-    if (!text || !Func.validUrl(text, 'youtu.be')) {
+    if (
+      !text ||
+      (!Func.validUrl(text, 'youtu.be') &&
+       !Func.validUrl(text, 'youtube.com'))
+    ) {
       return m.reply(Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E'))
     }
 
