@@ -6,20 +6,22 @@ export const run = {
     if (
       !text ||
       (!Func.validUrl(text, 'youtu.be') &&
-       !Func.validUrl(text, 'youtube.com'))
+        !Func.validUrl(text, 'youtube.com'))
     ) {
-      return m.reply(Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E'))
+      return m.reply(
+        Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E')
+      )
     }
 
     m.reply(config.msg.wait)
 
     try {
       const result = await Func.fetchJson(
-        `${config.api.baseUrl.skyzxu}/api/ytmp3?url=${encodeURIComponent(text)}`
+        `${config.api.baseUrl.skyzxu}/api/downloader/ytmp3?url=${encodeURIComponent(text)}`
       )
 
-      if (!result.success || !result.results) {
-        return m.reply(Func.jsonFormat(result))
+      if (result.code !== 200 || !result.results) {
+        return m.reply(config.msg.error)
       }
 
       const { metadata, download } = result.results
@@ -30,27 +32,30 @@ export const run = {
 
       const caption =
         `#> YouTube Download\n` +
-        `- title : ${metadata.title || ''}\n` +
-        `- uploader : ${metadata.uploader || ''}\n` +
+        `- title : ${metadata.title || '-'}\n` +
+        `- uploader : ${metadata.uploader || '-'}\n` +
         `- duration : ${Func.toDate(metadata.duration)}\n` +
-        `- views : ${Func.h2k(metadata.view_count)}\n` +
-        `- likes : ${Func.h2k(metadata.like_count)}\n` +
-        `- description : ${metadata.description || ''}`
+        `- views : ${Func.h2k(metadata.view_count || 0)}\n` +
+        `- likes : ${Func.h2k(metadata.like_count || 0)}\n` +
+        `- description : ${metadata.description || '-'}`
 
       await m.reply({
-        image: { url: metadata.thumbnail },
+        image: {
+          url: metadata.thumbnail
+        },
         caption
       })
 
       await m.reply({
-        audio: { url: download.download_url },
+        audio: {
+          url: download.download_url
+        },
         mimetype: 'audio/mpeg',
-        caption
+        fileName: `${metadata.title}.mp3`
       })
-
     } catch (e) {
-      console.log(e.message)
-      m.reply(config.msg.error)
+      console.log(e)
+      return m.reply(config.msg.error)
     }
   }
 }
