@@ -33,13 +33,10 @@ export default {
 
   api: {
     baseUrl: {
-      anabot: 'https://anabot.my.id',
-      skyzxu: 'https://api.skyzxu.my.id',
-      popcat: 'https://api.popcat.xyz'
+      api_name1: 'https://example.com'
     },
     key: {
-      gemini: process.env.GEMINI_KEY,
-      anabot: 'freeApikey'
+      apikey1: 'abcd'
     }
   },
 
