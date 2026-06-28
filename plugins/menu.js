@@ -15,7 +15,7 @@ export const run = {
   run: async (m) => {
     const categories = {}
 
-    for (const [_, plugin] of globalThis.plugins.entries()) {
+    for (const [, plugin] of globalThis.plugins.entries()) {
       if (plugin.category && plugin.cmd) {
         if (!categories[plugin.category]) categories[plugin.category] = []
         categories[plugin.category].push(...plugin.cmd)
@@ -30,13 +30,17 @@ export const run = {
     text += `- Prefix : [ ${config.prefix.join(', ')} ]\n`
     text += `- Time : ${time}\n\n`
 
-    for (const cat in categories) {
-      text += `\`${cat}\`\n`
-      text += categories[cat]
-        .sort()
-        .map(cmd => `\`\`\`- ${m.prefix || config.prefix[0]}${cmd}\`\`\``)
-        .join('\n')
-      text += '\n\n'
+    for (const cat of Object.keys(categories).sort()) {
+      text += `*- menu ${cat}*\n`
+
+      const cmds = [...new Set(categories[cat])].sort()
+
+      cmds.forEach((cmd, i) => {
+        const last = i === cmds.length - 1
+        text += `${last ? ' └' : ' │'} • ${m.prefix || config.prefix[0]}${cmd}\n`
+      })
+
+      text += '\n'
     }
 
     await m.reply(text.trim(), {
