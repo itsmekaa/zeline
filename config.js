@@ -34,7 +34,7 @@ export default {
   api: {
     baseUrl: {
       anabot: 'https://anabot.my.id',
-      skyzxu: 'https://skyzxu.katanya.dev',
+      skyzxu: 'https://api.skyzxu.my.id',
       popcat: 'https://api.popcat.xyz'
     },
     key: {
