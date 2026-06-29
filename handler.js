@@ -16,6 +16,10 @@ export const handler = async (sock, m) => {
     await db.init(msg)
     logger(msg)
 
+    if (!global.db.plugins) {
+      global.db.plugins = {}
+    }
+
     if (global.db.settings.autoread) {
       await sock.readMessages([msg.key])
     }
@@ -69,6 +73,28 @@ export const handler = async (sock, m) => {
         const queue = globalThis.cmdQueues.get(pluginPath)
 
         const executeCmd = async () => {
+          const pluginName = pluginPath
+            .split(/[\\/]/)
+            .pop()
+            .replace(/\.[^.]+$/, '')
+
+          const shouldTrack = !plugin?.settings?.owner
+
+          if (shouldTrack) {
+            if (!global.db.plugins[pluginName]) {
+              global.db.plugins[pluginName] = {
+                total: 0,
+                success: 0,
+                error: 0,
+                firstUsed: Date.now(),
+                lastUsed: Date.now()
+              }
+            }
+
+            global.db.plugins[pluginName].total++
+            global.db.plugins[pluginName].lastUsed = Date.now()
+          }
+
           try {
             await plugin.run(msg, {
               sock,
@@ -77,7 +103,16 @@ export const handler = async (sock, m) => {
               text: msg.args.join(' '),
               args: msg.args
             })
+
+            if (shouldTrack) {
+              global.db.plugins[pluginName].success++
+            }
           } catch (error) {
+            if (shouldTrack) {
+              global.db.plugins[pluginName].error++
+            }
+
+            console.error(error)
             msg.reply(config.msg.error)
           }
         }
