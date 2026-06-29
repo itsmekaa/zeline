@@ -12,7 +12,7 @@ export const run = {
       return m.reply(Func.usage(prefix, command, '(reply / send image)'))
     }
 
-    await m.reply(config.msg.wait)
+    m.react(config.emoji) 
 
     try {
       const media =
@@ -28,7 +28,7 @@ export const run = {
       })
     } catch (e) {
       console.log(e)
-      m.reply(config.msg.error)
+      throw e
     }
   }
 }

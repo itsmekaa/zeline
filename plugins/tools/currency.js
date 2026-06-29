@@ -7,11 +7,7 @@ export const run = {
   run: async (m, { sock, text, prefix, command }) => {
     try {
       if (!text) {
-        return m.reply(
-`# Cara penggunaan
-> ${prefix + command} USD IDR 10
-> ${prefix + command} 10 USD to IDR`
-        )
+        return m.reply(Func.usage(prefix, command, '1 usd to idr'))
       }
 
       let amount, from, to
@@ -54,7 +50,7 @@ ${amount} ${from} = ${result.toFixed(2)} ${to}`
 
     } catch (err) {
       console.error(err.message)
-      return m.reply(config.msg.error)
+      throw err
     }
   }
 }

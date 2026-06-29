@@ -31,7 +31,7 @@ export const run = {
       })
     } catch (e) {
       console.log(e)
-      m.reply(config.msg.error)
+      throw e
     }
   }
 }

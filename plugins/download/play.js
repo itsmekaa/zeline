@@ -6,7 +6,7 @@ export const run = {
       return m.reply(Func.usage(prefix, command, 'multo'))
     }
 
-    m.reply(config.msg.wait)
+    m.react(config.emoji)
 
     try {
       const result = await Func.fetchJson(
@@ -43,9 +43,9 @@ export const run = {
         fileName: `${metadata.title}.mp3`,
         ptt: false
       })
-    } catch (e) {
-      console.log(e)
-      return m.reply(config.msg.error)
+    } catch (error) {
+      console.log(error)
+      throw error
     }
   }
 }

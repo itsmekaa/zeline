@@ -16,7 +16,7 @@ export const run = {
       return m.reply(Func.usage(prefix, command, '(reply / send audio or video)'))
     }
 
-    await m.reply(config.msg.wait)
+    m.react(config.emoji)
 
     try {
       const media = (m.quoted && (m.quoted.type === 'videoMessage' || m.quoted.type === 'audioMessage')) ? m.quoted : m
@@ -48,7 +48,7 @@ export const run = {
       fs.unlinkSync(tmpOut)
     } catch (e) {
       console.log(e)
-      m.reply(config.msg.error)
+      throw e
     }
   }
 }

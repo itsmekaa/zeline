@@ -13,7 +13,7 @@ export const run = {
       )
     }
 
-    m.reply(config.msg.wait)
+    m.react(config.emoji)
 
     try {
       const result = await Func.fetchJson(
@@ -49,7 +49,7 @@ export const run = {
       })
     } catch (e) {
       console.error(e)
-      return m.reply(config.msg.error)
+      throw e
     }
   }
 }

@@ -11,7 +11,7 @@ export const run = {
       return m.reply(Func.usage(prefix, command, 'https://pin.it/3tzPdhOHI'))
     }
 
-    m.reply(config.msg.wait)
+    m.react(config.emoji)
 
     try {
       const result = await scrape.pindl(text)
@@ -37,9 +37,9 @@ export const run = {
           caption
         })
       }
-    } catch (e) {
-      console.log(e)
-      m.reply(config.msg.error)
+    } catch (error) {
+      console.log(error)
+      throw error
     }
   }
 }
