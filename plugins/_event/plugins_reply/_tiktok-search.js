@@ -40,8 +40,6 @@ export const run = {
       }
     )
 
-    delete db.event.tiktokSearch[m.sender]
-
     return true
   }
 }
