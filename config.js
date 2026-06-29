@@ -20,6 +20,7 @@ export default {
     author: 'wabot'
   },
 
+  emoji: '🍃', // for reaction waiting
   msg: {
     wait: '[ + ] Executing command...',
     owner: '[ ! ] Access denied. Owner only.',
@@ -45,7 +46,7 @@ export default {
 
   database: {
     url: process.env.DATABASE_URL,
-    files: 'localdb' // jika menggunakan database local (localdb.json)
+    files: 'localdb' // local db name file
   },
   
   tz: 'Asia/Jakarta'
