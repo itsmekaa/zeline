@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['toimage'],
   hidden: ['toimg'],
-  category: 'creativity',
+  category: 'tools',
   run: async (m, { prefix, command }) => {
 
     if (
