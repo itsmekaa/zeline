@@ -46,7 +46,7 @@ export const run = {
       await m.reply(caption.trim())
     } catch (e) {
       console.error(e)
-      m.reply(config.msg.error)
+      throw e
     }
   }
 }

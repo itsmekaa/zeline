@@ -7,7 +7,7 @@ export const run = {
       return m.reply(Func.usage(prefix, command, 'wallpaper'))
     }
 
-    m.reply(config.msg.wait)
+    m.react(config.emoji)
 
     try {
       const results = await scrape.pinterest(text)
@@ -44,7 +44,7 @@ export const run = {
       }
     } catch (e) {
       console.log(e)
-      m.reply(config.msg.error)
+      throw e
     }
   }
 }

@@ -30,8 +30,8 @@ export const run = {
         await m.reply({ audio: buffer })
       }
     } catch (e) {
-      console.log(e.message)
-      m.reply(config.msg.error)
+      console.log(e)
+      throw e
     }
   }
 }

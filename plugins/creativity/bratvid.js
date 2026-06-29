@@ -26,7 +26,7 @@ export const run = {
       })
     } catch (e) {
       console.log(e)
-      return m.reply(config.msg.error)
+      throw e
     }
   }
 }

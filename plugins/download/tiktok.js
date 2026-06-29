@@ -7,7 +7,7 @@ export const run = {
       return m.reply(Func.usage(prefix, command, 'https://vt.tiktok.com/ZSQqVxbbM/'))
     }
 
-    m.reply(config.msg.wait)
+    m.react(config.emoji)
 
     try {
       const result = await Func.fetchJson(
@@ -50,7 +50,7 @@ export const run = {
       }
     } catch (e) {
       console.log(e)
-      m.reply(config.msg.error)
+      throw e
     }
   }
 }

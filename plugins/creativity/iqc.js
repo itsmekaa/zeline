@@ -10,7 +10,7 @@ export const run = {
       return m.reply(Func.usage(prefix, command, 'kelaz kink'))
     }
 
-    await m.reply(config.msg.wait)
+    m.react(config.emoji)
 
     try {
       const time = moment().tz(config.tz).format('HH:mm')
@@ -28,8 +28,8 @@ export const run = {
       })
 
     } catch (e) {
-      console.log(e.message)
-      m.reply(config.msg.error)
+      console.log(e)
+      throw e
     }
   }
 }

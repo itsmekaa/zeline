@@ -46,8 +46,8 @@ export const run = {
       const result = data.candidates[0].content.parts[0].text
       await m.reply(result.trim())
     } catch (error) {
-      console.log(error.message)
-      m.reply(config.msg.error)
+      console.log(error)
+      throw error
     }
   }
 }
