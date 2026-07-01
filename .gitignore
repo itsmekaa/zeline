@@ -1,0 +1,6 @@
+.env
+node_modules/
+session/
+localdb.json
+package.json
+package-lock.json
