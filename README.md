@@ -24,29 +24,6 @@ npm install
 ```
 
 ## Configuration
-
-Edit `config.js`:
-
-```js
-import "dotenv/config";
-
-export default {
-  pairing: {
-    state: true,
-    number: process.env.BOT,
-    code: "ZELINBOT" <- custom pairing code
-  },
-
-  owner: process.env.OWNER.split(","),
-
-  api: {
-    key: {
-      gemini: process.env.GEMINI_KEY
-    }
-  }
-};
-```
-
 Create `.env` file:
 
 ```env
