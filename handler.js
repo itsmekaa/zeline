@@ -1,135 +1,72 @@
 import { serialize } from './lib/serialize.js'
 import { logger } from './lib/log.js'
+import { getOrCreateQueue } from './core/queue.js'
+import { checkPermissions } from './core/permissions.js'
+import { executeCommand } from './core/executor.js'
 
-if (!globalThis.cmdQueues) {
-  globalThis.cmdQueues = new Map()
-}
-
-export const handler = async (sock, m) => {
+export const handler = async (sock, data) => {
   try {
-    if (!m.message) return
-
-    const msg = await serialize(m, sock)
-
-    await db.init(msg)
-    logger(msg)
-
-    if (!global.db.plugins) {
-      global.db.plugins = {}
-    }
-
-    if (global.db.settings.autoread) {
-      await sock.readMessages([msg.key])
-    }
-
-    for (const [, plugin] of globalThis.plugins.entries()) {
-      if (typeof plugin.event === 'function') {
-        const stop = await plugin.event(msg, { sock })
-        if (stop) return
+    if (data.message) {
+      const msg = await serialize(data, sock)
+      await db.init(msg)
+      logger(msg)
+      if (!db.plugins) {
+        global.db.plugins = {}
       }
-    }
-
-    if (!msg.command) return
-    if (global.db.settings.self && !msg.isOwner) return
-
-    for (const [pluginPath, plugin] of globalThis.plugins.entries()) {
-      const isCmd = plugin?.cmd?.includes(msg.command)
-      const isHidden = plugin?.hidden?.includes(msg.command)
-
-      if (!isCmd && !isHidden) continue
-
-      if (plugin?.settings) {
-        if (plugin.settings.owner && !msg.isOwner) return msg.reply(config.msg.owner)
-        if (plugin.settings.group && !msg.isGroup) return msg.reply(config.msg.group)
-        if (plugin.settings.private && msg.isGroup) return msg.reply(config.msg.private)
-
-        if (msg.isGroup) {
-          if (plugin.settings.admin && !msg.isAdmin) return msg.reply(config.msg.admin)
-          if (plugin.settings.botAdmin && !msg.isBotAdmin) return msg.reply(config.msg.botAdmin)
+      if (global.db.settings.autoread) {
+        await sock.readMessages([msg.key])
+      }
+      for (const [, plugin] of globalThis.plugins.entries()) {
+        if (typeof plugin.event === 'function') {
+          const stop = await plugin.event(msg, { sock })
+          if (stop) return
         }
       }
-
-      if (!globalThis.cmdQueues.has(pluginPath)) {
-        globalThis.cmdQueues.set(pluginPath, {
-          items: [],
-          running: false,
-          async process() {
-            if (this.running || this.items.length === 0) return
-            this.running = true
-            const { task } = this.items.shift()
-            try {
-              await task()
-            } catch (e) {
-              console.error(e)
-            }
-            this.running = false
-            this.process()
+      if (!msg.command) return
+      if (global.db.settings.self && !msg.isOwner) return
+      for (const [pluginPath, plugin] of globalThis.plugins.entries()) {
+        const isCmd = plugin?.cmd?.includes(msg.command)
+        const isHidden = plugin?.hidden?.includes(msg.command)
+        if (!isCmd && !isHidden) continue
+        if (!checkPermissions(plugin, msg, config)) return
+        const queue = getOrCreateQueue(pluginPath)
+        const task = () => executeCommand(pluginPath, plugin, msg, sock, config)
+        if (global.db.settings.antrian) {
+          queue.items.push({ task })
+          const position = queue.items.length + (queue.running ? 1 : 0)
+          const isOwnerPrivilege = plugin?.settings?.owner || msg.isOwner
+          if (position > 1 && !isOwnerPrivilege) {
+            msg.reply(`[ ! ] Anda berada di antrian *#${position}*,\nMohon menunggu...`)
           }
-        })
-      }
-
-      const queue = globalThis.cmdQueues.get(pluginPath)
-
-      const executeCmd = async () => {
-        const pluginName = pluginPath.split(/[\\/]/).pop().replace(/\.[^.]+$/, '')
-        const shouldTrack = !plugin?.settings?.owner
-        const isStats = pluginName === 'stats'
-
-        if (shouldTrack && !isStats) {
-          if (!global.db.plugins[pluginName]) {
-            global.db.plugins[pluginName] = {
-              total: 0,
-              success: 0,
-              error: 0,
-              firstUsed: Date.now(),
-              lastUsed: Date.now()
-            }
-          }
-
-          global.db.plugins[pluginName].total++
-          global.db.plugins[pluginName].lastUsed = Date.now()
+          queue.process()
+        } else {
+          await task()
         }
-
-        let ok = false
-
-        try {
-          await plugin.run(msg, {
-            sock,
-            prefix: msg.prefix,
-            command: msg.command,
-            text: msg.args.join(' '),
-            args: msg.args
-          })
-          ok = true
-        } catch (error) {
-          console.error(error)
-          msg.reply(config.msg.error)
-        } finally {
-          if (shouldTrack && !isStats && global.db.plugins[pluginName]) {
-            if (ok) {
-              global.db.plugins[pluginName].success++
-            } else {
-              global.db.plugins[pluginName].error++
-            }
-          }
+        break
+      }
+    } else if (data.id && data.participants && data.action) {
+      const { id, participants, action } = data
+      for (const participant of participants) {
+        const mention = participant.phoneNumber
+        let text = ''
+        switch (action) {
+          case 'add':
+            text = `👋 Selamat datang @${mention.split('@')[0]} di grup!`
+            break
+          case 'remove':
+            text = `😢 Selamat tinggal @${mention.split('@')[0]}`
+            break
+          case 'promote':
+            text = `🎉 @${mention.split('@')[0]} sekarang menjadi *Admin*!`
+            break
+          case 'demote':
+            text = `⚠️ @${mention.split('@')[0]} tidak lagi menjadi *Admin*.`
+            break
+        }
+        if (text) {
+          await sock.sendMessage(id, { text, mentions: [mention] })
         }
       }
-
-      if (global.db.settings.antrian) {
-        queue.items.push({ task: executeCmd })
-        const position = queue.items.length + (queue.running ? 1 : 0)
-        const isOwnerPrivilege = plugin?.settings?.owner || msg.isOwner
-
-        if (position > 1 && !isOwnerPrivilege) {
-          msg.reply(`[ ! ] Anda berada di antrian *#${position}*,\nMohon menunggu...`)
-        }
-
-        queue.process()
-      } else {
-        await executeCmd()
-      }
-
-      break
     }
   } catch (error) {
     console.error(error)
