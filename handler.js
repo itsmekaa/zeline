@@ -11,7 +11,7 @@ export const handler = async (sock, data) => {
       await db.init(msg)
       logger(msg)
       if (!db.plugins) {
-        global.db.plugins = {}
+        db.plugins = {}
       }
       if (global.db.settings.autoread) {
         await sock.readMessages([msg.key])
