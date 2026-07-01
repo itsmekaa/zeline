@@ -13,7 +13,7 @@ export const handler = async (sock, data) => {
       if (!db.plugins) {
         db.plugins = {}
       }
-      if (global.db.settings.autoread) {
+      if (db.settings.autoread) {
         await sock.readMessages([msg.key])
       }
       for (const [, plugin] of globalThis.plugins.entries()) {
@@ -23,7 +23,7 @@ export const handler = async (sock, data) => {
         }
       }
       if (!msg.command) return
-      if (global.db.settings.self && !msg.isOwner) return
+      if (db.settings.self && !msg.isOwner) return
       for (const [pluginPath, plugin] of globalThis.plugins.entries()) {
         const isCmd = plugin?.cmd?.includes(msg.command)
         const isHidden = plugin?.hidden?.includes(msg.command)
@@ -31,7 +31,7 @@ export const handler = async (sock, data) => {
         if (!checkPermissions(plugin, msg, config)) return
         const queue = getOrCreateQueue(pluginPath)
         const task = () => executeCommand(pluginPath, plugin, msg, sock, config)
-        if (global.db.settings.antrian) {
+        if (db.settings.antrian) {
           queue.items.push({ task })
           const position = queue.items.length + (queue.running ? 1 : 0)
           const isOwnerPrivilege = plugin?.settings?.owner || msg.isOwner
