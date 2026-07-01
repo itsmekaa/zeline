@@ -21,10 +21,10 @@ export const run = {
           : m
 
       const buffer = await media.download()
-      const enhanced = await scrape.enhance(buffer, 'medium')
+      const remini = await scrape.remini(buffer)
 
       await m.reply({
-        image: enhanced
+        image: remini
       })
     } catch (e) {
       console.log(e)
