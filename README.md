@@ -24,7 +24,7 @@ npm install
 ```
 
 ## Configuration
-Create `.env` file:
+Edit `.env` file:
 
 ```env
 BOT=62xx
@@ -63,6 +63,7 @@ pm2 start ecosystem.config.cjs && pm2 logs zeline
 
 ```text
 zeline/
+├── core/
 ├── lib/
 ├── plugins/
 ├── session/
