@@ -22,7 +22,7 @@ export const run = {
 
       const caption =
         `#> Instagram Download\n` +
-        `- total : ${data.length}`
+        `- media : ${data.length}`
 
       const media = data.map(v => v.url).filter(Boolean)
 
