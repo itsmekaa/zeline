@@ -40,6 +40,7 @@ export default {
     },
     key: {
       gemini: process.env.GEMINI_KEY,
+      key: 'free',
       anabot: 'freeApikey'
     }
   },
