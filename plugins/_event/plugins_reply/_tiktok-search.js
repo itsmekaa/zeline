@@ -23,9 +23,9 @@ export const run = {
     caption += `- title : ${video.title || '-'}\n`
     caption += `- author : ${video.author?.nickname || '-'}\n`
     caption += `- region : ${video.region || '-'}\n`
-    caption += `- views : ${Func.h2k(video.play_count || 0)}\n`
-    caption += `- likes : ${Func.h2k(video.digg_count || 0)}\n`
-    caption += `- comment : ${Func.h2k(video.comment_count || 0)}`
+    caption += `- views : ${Func.h2k(video.stats?.play || 0)}\n`
+    caption += `- likes : ${Func.h2k(video.stats?.like || 0)}\n`
+    caption += `- comment : ${Func.h2k(video.stats?.comment || 0)}`
 
     await sock.sendMessage(
       m.chat,

@@ -11,40 +11,40 @@ export const run = {
 
     try {
       const result = await Func.fetchJson(
-        `https://tikwm.com/api/?url=${encodeURIComponent(Func.extractUrl(text))}`
+        `${config.api.baseUrl.skyzxu}/api/downloader/tiktok?url=${encodeURIComponent(Func.extractUrl(text))}&key=${config.api.key.skyzxu}`
       )
 
-      if (!result?.data) {
-        return m.reply(config.msg.error)
-      }
-
-      const data = result.data
+      const data = result.results
 
       const caption =
         `#> TikTok Download\n` +
         `- title : ${data.title || ''}\n` +
         `- author : ${data.author?.nickname || ''}\n` +
         `- region : ${data.region || '-'}\n` +
-        `- views : ${Func.h2k(data.play_count)}\n` +
-        `- likes : ${Func.h2k(data.digg_count)}\n` +
-        `- comment : ${Func.h2k(data.comment_count)}`
+        `- views : ${Func.h2k(data.stats?.play || 0)}\n` +
+        `- likes : ${Func.h2k(data.stats?.like || 0)}\n` +
+        `- comment : ${Func.h2k(data.stats?.comment || 0)}`
 
-      if (data.images?.length) {
-        if (data.images.length > 1) {
-          await sock.sendAlbum(m.chat, data.images, {
+      if (data.type === 'slide') {
+        const images = data.media.filter(v => v.type === 'image').map(v => v.url)
+        
+        if (images.length > 1) {
+          await sock.sendAlbum(m.chat, images, {
             caption,
             delay: 1000,
             quoted: m
           })
         } else {
           await m.reply({
-            image: { url: data.images[0] },
+            image: { url: images[0] },
             caption
           })
         }
       } else {
+        const video = data.media.find(v => v.type === 'video')
+        
         await m.reply({
-          video: { url: data.play },
+          video: { url: video.url },
           caption
         })
       }

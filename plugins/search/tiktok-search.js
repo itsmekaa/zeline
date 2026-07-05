@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 db.event ??= {}
 db.event.tiktokSearch ??= {}
 
@@ -13,11 +11,9 @@ export const run = {
         return m.reply(Func.usage(prefix, command, 'video cinematic'))
       }
 
-      const { data } = await axios.get(
-        `https://tikwm.com/api/feed/search?keywords=${encodeURIComponent(text)}`
-      )
+      const data = await Func.fetchJson(`${config.api.baseUrl.skyzxu}/api/search/tiktok?keywords=${encodeURIComponent(text)}&key=${config.api.key.skyzxu}`)
 
-      const videos = data?.data?.videos || []
+      const videos = data?.results?.results || []
 
       if (!videos.length) {
         return m.reply('Video tidak ditemukan')
@@ -37,7 +33,7 @@ export const run = {
         caption += `${i + 1}.\n`
         caption += `- title : ${(v.title || '-').slice(0, 80)}\n`
         caption += `- author : ${v.author?.nickname || '-'}\n`
-        caption += `- views : ${Func.h2k(v.play_count || 0)}\n\n`
+        caption += `- views : ${Func.h2k(v.stats?.play || 0)}\n\n`
       })
 
       caption += `Kirim angka 1 - ${Math.min(videos.length, 10)} untuk download video.\n`
