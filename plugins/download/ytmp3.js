@@ -17,7 +17,7 @@ export const run = {
 
     try {
       const result = await Func.fetchJson(
-        `${config.api.baseUrl.skyzxu}/api/downloader/ytmp3?url=${encodeURIComponent(text)}`
+        `${config.api.baseUrl.skyzxu}/api/downloader/ytmp3?url=${encodeURIComponent(text)}&key=${config.api.key.skyzxu}`
       )
 
       if (result.code !== 200 || !result.results) {

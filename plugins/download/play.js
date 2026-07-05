@@ -10,7 +10,7 @@ export const run = {
 
     try {
       const result = await Func.fetchJson(
-        `${config.api.baseUrl.skyzxu}/api/downloader/playmusic?query=${encodeURIComponent(text)}`
+        `${config.api.baseUrl.skyzxu}/api/downloader/playmusic?query=${encodeURIComponent(text)}&key=${config.api.key.skyzxu}`
       )
 
       if (result.code !== 200 || !result.results) {

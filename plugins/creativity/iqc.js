@@ -18,7 +18,7 @@ export const run = {
       const res = await axios.get(
         `${config.api.baseUrl.skyzxu}/api/iqc`,
         {
-          params: { text, time },
+          params: { text, time, key: config.api.key.skyzxu },
           responseType: 'arraybuffer'
         }
       )
