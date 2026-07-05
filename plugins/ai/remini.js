@@ -15,13 +15,11 @@ export const run = {
     m.react(config.emoji) 
 
     try {
-      const media =
-        m.quoted && m.quoted.type === 'imageMessage'
-          ? m.quoted
-          : m
-
+      const media = m.quoted && m.quoted.type === 'imageMessage' ? m.quoted : m
+      
       const buffer = await media.download()
-      const remini = await scrape.remini(buffer)
+      const imageUrl = await uploader.uguu(buffer)
+      const remini = await Func.fetchBuffer(`${config.api.baseUrl.skyzxu}/api/ai/remini?url=${imageUrl}&key=${config.api.key.skyzxu}`)
 
       await m.reply({
         image: remini
