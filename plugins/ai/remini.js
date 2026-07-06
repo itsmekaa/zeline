@@ -19,7 +19,7 @@ export const run = {
       
       const buffer = await media.download()
       const imageUrl = await uploader.uguu(buffer)
-      const remini = await Func.fetchBuffer(`${config.api.baseUrl.skyzxu}/api/ai/remini?url=${imageUrl}&key=${config.api.key.skyzxu}`)
+      const remini = await Func.fetchBuffer(`${config.api.baseUrl.zeline}/api/ai/remini?url=${imageUrl}&key=${config.api.key.zeline}`)
 
       await m.reply({
         image: remini

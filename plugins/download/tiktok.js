@@ -11,7 +11,7 @@ export const run = {
 
     try {
       const result = await Func.fetchJson(
-        `${config.api.baseUrl.skyzxu}/api/downloader/tiktok?url=${encodeURIComponent(Func.extractUrl(text))}&key=${config.api.key.skyzxu}`
+        `${config.api.baseUrl.zeline}/api/downloader/tiktok?url=${encodeURIComponent(Func.extractUrl(text))}&key=${config.api.key.zeline}`
       )
 
       const data = result.results

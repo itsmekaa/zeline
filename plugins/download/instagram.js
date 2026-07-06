@@ -13,7 +13,7 @@ export const run = {
 
     try {
       const result = await Func.fetchJson(
-        `${config.api.baseUrl.skyzxu}/api/downloader/ig?url=${encodeURIComponent(Func.extractUrl(text))}&key=${config.api.key.skyzxu}`
+        `${config.api.baseUrl.zeline}/api/downloader/ig?url=${encodeURIComponent(Func.extractUrl(text))}&key=${config.api.key.zeline}`
       )
 
       const media = result.results

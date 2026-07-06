@@ -16,9 +16,9 @@ export const run = {
       const time = moment().tz(config.tz).format('HH:mm')
 
       const res = await axios.get(
-        `${config.api.baseUrl.skyzxu}/api/canvas/iqc`,
+        `${config.api.baseUrl.zeline}/api/canvas/iqc`,
         {
-          params: { text, time, key: config.api.key.skyzxu },
+          params: { text, time, key: config.api.key.zeline },
           responseType: 'arraybuffer'
         }
       )

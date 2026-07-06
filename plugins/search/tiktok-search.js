@@ -11,7 +11,7 @@ export const run = {
         return m.reply(Func.usage(prefix, command, 'video cinematic'))
       }
 
-      const data = await Func.fetchJson(`${config.api.baseUrl.skyzxu}/api/search/tiktok?keywords=${encodeURIComponent(text)}&key=${config.api.key.skyzxu}`)
+      const data = await Func.fetchJson(`${config.api.baseUrl.zeline}/api/search/tiktok?keywords=${encodeURIComponent(text)}&key=${config.api.key.zeline}`)
 
       const videos = data?.results?.results || []
 

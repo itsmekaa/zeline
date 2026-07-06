@@ -17,7 +17,7 @@ export const run = {
 
     try {
       const result = await Func.fetchJson(
-        `${config.api.baseUrl.skyzxu}/api/downloader/ytmp4?url=${encodeURIComponent(text)}&key=${config.api.key.skyzxu}`
+        `${config.api.baseUrl.zeline}/api/downloader/ytmp4?url=${encodeURIComponent(text)}&key=${config.api.key.zeline}`
       )
 
       if (result.code !== 200 || !result.results) {

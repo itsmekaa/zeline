@@ -35,12 +35,12 @@ export default {
   api: {
     baseUrl: {
       anabot: 'https://anabot.my.id',
-      skyzxu: 'https://api.skyzxu.my.id',
+      zeline: 'https://api.zeline.eu.cc',
       popcat: 'https://api.popcat.xyz'
     },
     key: {
       gemini: process.env.GEMINI_KEY,
-      skyzxu: 'free',
+      zeline: 'free',
       anabot: 'freeApikey'
     }
   },
