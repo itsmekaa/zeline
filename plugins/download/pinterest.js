@@ -13,35 +13,35 @@ export const run = {
 
     try {
       if (isUrl) {
-        const res = await fetch(`${config.api.baseUrl.zeline}/api/downloader/pinterest?url=${encodeURIComponent(text)}&key=${config.api.key.zeline}`)
-        const json = await res.json()
+        const json = await Func.fetchJson(`${config.api.baseUrl.zeline}/api/downloader/pinterest?url=${encodeURIComponent(text)}&key=${config.api.key.zeline}`)
 
         const result = json.results
-        const media = result.media.map(v => v.url)
+        const mediaList = result.media
 
         const caption =
           `#> Pinterest Download\n` +
           `- title : ${result.title || '-'}\n` +
           `- author : ${result.author || 'unknown'}\n` +
-          `- media : ${media.length}`
+          `- media : ${mediaList.length}`
 
-        if (media.length > 1) {
-          await sock.sendAlbum(m.chat, media, {
+        if (mediaList.length > 1) {
+          const urls = mediaList.map(v => v.url)
+
+          await sock.sendAlbum(m.chat, urls, {
             caption,
             delay: 1000,
             quoted: m
           })
         } else {
-          const type = result.media[0].type === 'video' ? 'video' : 'image'
+          const type = mediaList[0].type === 'video' ? 'video' : 'image'
 
           await m.reply({
-            [type]: { url: media[0] },
+            [type]: { url: mediaList[0].url },
             caption
           })
         }
       } else {
-        const res = await fetch(`${config.api.baseUrl.zeline}/api/search/pinterest?query=${encodeURIComponent(text)}&key=${config.api.key.zeline}`)
-        const json = await res.json()
+        const json = await Func.fetchJson(`${config.api.baseUrl.zeline}/api/search/pinterest?query=${encodeURIComponent(text)}&key=${config.api.key.zeline}`)
 
         if (!json.results?.data?.length) {
           return m.reply('No results found.')
