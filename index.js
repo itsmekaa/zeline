@@ -14,10 +14,6 @@ import * as uploader from './lib/uploader.js'
 globalThis.uploader = uploader
 global.uploader = uploader
 
-import scrape from './scrape/index.js'
-globalThis.scrape = scrape
-global.scrape = scrape
-
 import { makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } from 'baileys'
 import pino from 'pino'
 import chalk from 'chalk'
