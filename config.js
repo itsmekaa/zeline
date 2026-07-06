@@ -34,14 +34,11 @@ export default {
 
   api: {
     baseUrl: {
-      anabot: 'https://anabot.my.id',
-      zeline: 'https://api.zeline.eu.cc',
-      popcat: 'https://api.popcat.xyz'
+      zeline: 'https://api.zeline.eu.cc'
     },
     key: {
       gemini: process.env.GEMINI_KEY,
-      zeline: 'free',
-      anabot: 'freeApikey'
+      zeline: 'free'
     }
   },
 
