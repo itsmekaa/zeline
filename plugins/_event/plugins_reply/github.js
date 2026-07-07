@@ -1,10 +1,9 @@
-//event.js
 db.event ??= {}
 db.event.githubSearch ??= {}
 
 export const run = {
   event: async (m, { sock }) => {
-    if (!m.text) return false
+    if (!m.text || !m.quoted) return false
 
     const session = db.event.githubSearch?.[m.sender]
     if (!session) return false
@@ -14,10 +13,11 @@ export const run = {
       return false
     }
 
+    if (m.quoted.key.id !== session.messageId) return false
+
     if (!/^(10|[1-9])$/.test(m.text.trim())) return false
 
     const repo = session.repos[Number(m.text.trim()) - 1]
-
     if (!repo) return false
 
     const zipUrl = `${repo.html_url}/archive/refs/heads/${repo.default_branch}.zip`
@@ -44,6 +44,8 @@ export const run = {
         quoted: m
       }
     )
+
+    delete db.event.githubSearch[m.sender]
 
     return true
   }

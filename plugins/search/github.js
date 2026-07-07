@@ -18,12 +18,7 @@ export const run = {
       )
 
       if (!data.items?.length) {
-        return m.reply('Repository tidak ditemukan')
-      }
-
-      db.event.githubSearch[m.sender] = {
-        repos: data.items,
-        expired: Date.now() + 60000
+        return m.reply('no repositories found')
       }
 
       let caption = `#> GitHub Search\n`
@@ -39,10 +34,16 @@ export const run = {
         caption += `- forks : ${Func.h2k(repo.forks_count || 0)}\n\n`
       })
 
-      caption += `Kirim angka 1 - ${data.items.length} untuk download repository.\n`
-      caption += `Expired dalam 1 menit.`
+      caption += `reply with a number between 1-${data.items.length} to download.\n`
+      caption += `expires in 1 minute.`
 
-      await m.reply(caption.trim())
+      const msg = await m.reply(caption.trim())
+
+      db.event.githubSearch[m.sender] = {
+        repos: data.items,
+        expired: Date.now() + 60000,
+        messageId: msg.key.id
+      }
     } catch (e) {
       console.error(e)
       throw e
