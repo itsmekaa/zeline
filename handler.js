@@ -9,9 +9,16 @@ export const handler = async (sock, data) => {
   try {
     if (data.message) {
       const msg = await serialize(data, sock)
+
       await db.init(msg)
 
       logger(msg)
+
+      if (db.settings.self && !msg.isOwner) return
+
+      if (!db.plugins) {
+        db.plugins = {}
+      }
 
       if (db.settings.autoread) {
         await sock.readMessages([msg.key])
@@ -25,7 +32,6 @@ export const handler = async (sock, data) => {
       }
 
       if (!msg.command) return
-      if (db.settings.self && !msg.isOwner) return
 
       for (const [pluginPath, plugin] of globalThis.plugins.entries()) {
         const isCmd = plugin?.cmd?.includes(msg.command)
@@ -62,6 +68,8 @@ export const handler = async (sock, data) => {
         break
       }
     } else if (data.id && data.participants && data.action) {
+      if (db.settings.self) return
+
       await notify(sock, data, db, config)
     }
   } catch (error) {
