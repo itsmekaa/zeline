@@ -6,40 +6,42 @@ export const run = {
   hidden: ['tts'],
   category: 'search',
   run: async (m, { text, command, prefix }) => {
+    if (!text)
+      return m.reply(Func.usage(prefix, command, 'video cinematic'))
+
     try {
-      if (!text) {
-        return m.reply(Func.usage(prefix, command, 'video cinematic'))
-      }
+      const {
+        results: { results: videos = [] } = {}
+      } = await Func.fetchJson(
+        `${config.api.baseUrl.zeline}/api/search/tiktok?keywords=${encodeURIComponent(text)}&key=${config.api.key.zeline}`
+      )
 
-      const data = await Func.fetchJson(`${config.api.baseUrl.zeline}/api/search/tiktok?keywords=${encodeURIComponent(text)}&key=${config.api.key.zeline}`)
+      if (!videos.length) return m.reply('no results found')
 
-      const videos = data?.results?.results || []
-
-      if (!videos.length) {
-        return m.reply('Video tidak ditemukan')
-      }
+      const result = videos.slice(0, 10)
 
       db.event.tiktokSearch[m.sender] = {
-        videos: videos.slice(0, 10),
+        videos: result,
         expired: Date.now() + 60000
       }
 
-      let caption = `#> TikTok Search\n`
-      caption += `- query : ${text}\n`
-      caption += `- result : ${Math.min(videos.length, 10)}\n\n`
-      caption += `#> Result Metadata\n`
-
-      videos.slice(0, 10).forEach((v, i) => {
-        caption += `${i + 1}.\n`
-        caption += `- title : ${(v.title || '-').slice(0, 80)}\n`
-        caption += `- author : ${v.author?.nickname || '-'}\n`
-        caption += `- views : ${Func.h2k(v.stats?.play || 0)}\n\n`
-      })
-
-      caption += `Kirim angka 1 - ${Math.min(videos.length, 10)} untuk download video.\n`
-      caption += `Expired dalam 1 menit.`
-
-      await m.reply(caption.trim())
+      await m.reply(
+        `#> TikTok Search\n` +
+          `- query : ${text}\n` +
+          `- result : ${result.length}\n\n` +
+          `#> Result Metadata\n` +
+          result
+            .map(
+              ({ title, author, stats }, i) =>
+                `${i + 1}.\n` +
+                `- title : ${(title || '-').slice(0, 80)}\n` +
+                `- author : ${author?.nickname || '-'}\n` +
+                `- views : ${Func.h2k(stats?.play || 0)}`
+            )
+            .join('\n\n') +
+          `\n\nsend a number between 1-${result.length} to download.\n` +
+          `expires in 1 minute.`
+      )
     } catch (e) {
       console.error(e)
       throw e

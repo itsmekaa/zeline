@@ -8,24 +8,24 @@ export const run = {
         m.type === 'imageMessage' ||
         (m.quoted && m.quoted.type === 'imageMessage')
       )
-    ) {
+    )
       return m.reply(Func.usage(prefix, command, '(reply / send image)'))
-    }
 
-    m.react(config.emoji) 
+    m.react(config.emoji)
 
     try {
-      const media = m.quoted && m.quoted.type === 'imageMessage' ? m.quoted : m
-      
-      const buffer = await media.download()
-      const imageUrl = await uploader.uguu(buffer)
-      const remini = await Func.fetchBuffer(`${config.api.baseUrl.zeline}/api/ai/remini?url=${imageUrl}&key=${config.api.key.zeline}`)
+      const media =
+        m.quoted?.type === 'imageMessage' ? m.quoted : m
 
       await m.reply({
-        image: remini
+        image: await Func.fetchBuffer(
+          `${config.api.baseUrl.zeline}/api/ai/remini?url=${
+            await uploader.uguu(await media.download())
+          }&key=${config.api.key.zeline}`
+        )
       })
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw e
     }
   }

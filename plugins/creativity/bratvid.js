@@ -1,31 +1,26 @@
-import axios from 'axios'
-
 export const run = {
   cmd: ['bratvid'],
   hidden: ['bratvideo'],
   category: 'creativity',
   run: async (m, { sock, text, prefix, command }) => {
-    if (!text) {
+    if (!text)
       return m.reply(Func.usage(prefix, command, 'hello world'))
-    }
 
     try {
-      const { data: media } = await axios.get(
-        'https://skyzxu-brat.hf.space/brat-animated?text=' +
-          encodeURIComponent(text),
+      await sock.sendSticker(
+        m.chat,
+        await Func.fetchBuffer(
+          `https://skyzxu-brat.hf.space/brat-animated?text=${encodeURIComponent(text)}`
+        ),
         {
-          responseType: 'arraybuffer'
+          packname: config.sticker.packname,
+          author: config.sticker.author,
+          ai: true,
+          quoted: m
         }
       )
-
-      sock.sendSticker(m.chat, media, {
-        packname: config.sticker.packname,
-        author: config.sticker.author,
-        ai: true,
-        quoted: m
-      })
     } catch (e) {
-      console.log(e)
+      console.error(e)
       throw e
     }
   }
