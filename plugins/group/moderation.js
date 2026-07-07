@@ -1,5 +1,5 @@
 export const run = {
-  cmd: ['groupset'],
+  cmd: ['moderation'],
   hidden: ['gcset', 'groupsettings'],
   category: 'group',
   settings: {
