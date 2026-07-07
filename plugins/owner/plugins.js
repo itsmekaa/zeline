@@ -9,36 +9,59 @@ export const run = {
   },
   run: async (m, { args }) => {
     const action = args[0]?.toLowerCase()
-    const pluginPath = args[1]
+    let pluginPath = args[1]
 
-    if (!action || !pluginPath) return m.reply(`Format: ${m.prefix}${m.command} <add/del/get> <path>`)
-    
+    if (!action || !pluginPath) {
+      return m.reply(`format: ${m.prefix}${m.command} <add/del/get> <file>`)
+    }
+
+    if (!pluginPath.endsWith('.js')) {
+      pluginPath += '.js'
+    }
+
     const targetPath = path.join(process.cwd(), 'plugins', pluginPath)
 
     if (action === 'add') {
-      if (!m.quoted || !m.quoted.text) return m.reply('Reply kode plugin.')
-      if (!m.quoted.text.includes('export const run')) return m.reply('Format plugin tidak valid. Harus memiliki export const run.')
-      
+      if (!m.quoted || !m.quoted.text) {
+        return m.reply('reply plugin code.')
+      }
+
+      if (!m.quoted.text.includes('export const run')) {
+        return m.reply('invalid plugin format. must contain export const run.')
+      }
+
       await fs.ensureDir(path.dirname(targetPath))
       await fs.writeFile(targetPath, m.quoted.text)
-      m.reply('plugin saved')
+
+      return m.reply(`plugin saved: ${pluginPath}`)
+
     } else if (action === 'del' || action === 'delete') {
-      if (!fs.existsSync(targetPath)) return m.reply('File tidak ditemukan.')
-      
+      if (!fs.existsSync(targetPath)) {
+        return m.reply('file not found.')
+      }
+
       await fs.unlink(targetPath)
-      m.reply('plugin deleted')
+
+      return m.reply(`plugin deleted: ${pluginPath}`)
+
     } else if (action === 'get') {
-      if (!fs.existsSync(targetPath)) return m.reply('File tidak ditemukan.')
-      
+      if (!fs.existsSync(targetPath)) {
+        return m.reply('file not found.')
+      }
+
       const content = await fs.readFile(targetPath, 'utf-8')
+
       if (content.length > 60000) {
         const buffer = Buffer.from(content)
-        await m.reply(buffer, { fileName: path.basename(targetPath) })
-      } else {
-        m.reply(content)
+        return m.reply(buffer, {
+          fileName: pluginPath
+        })
       }
+
+      return m.reply(content)
+
     } else {
-      m.reply(`Action tidak valid. Gunakan add, del, atau get.`)
+      return m.reply('invalid action. use add, del, or get.')
     }
   }
 }

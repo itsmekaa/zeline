@@ -9,8 +9,8 @@ export const run = {
     owner: true
   },
   run: async (m, { text }) => {
-    if (!text) return m.reply('Masukkan command terminal.')
-    
+    if (!text) return m.reply('enter terminal command.')
+
     exec(text, (error, stdout, stderr) => {
       if (stdout) return m.reply(util.format(stdout).trim())
       if (stderr) return m.reply(util.format(stderr).trim())
