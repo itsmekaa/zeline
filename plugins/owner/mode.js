@@ -17,13 +17,18 @@ export const run = {
       return m.reply(`${modeList}\nswitch mode:\n${prefix + command} self on`)
     }
 
-    const modeType = args[0]?.toLowerCase()
+    const input = args[0]
     const action = args[1]?.toLowerCase()
-    const formattedMode = modeType.charAt(0).toUpperCase() + modeType.slice(1)
 
-    if (!validModes.includes(modeType)) {
-      return m.reply(`mode *${modeType}* not found. available modes: *${validModes.join(', ')}*`)
+    const modeType = validModes.find(
+      mode => mode.toLowerCase() === input?.toLowerCase()
+    )
+
+    if (!modeType) {
+      return m.reply(`mode *${input}* not found. available modes: *${validModes.join(', ')}*`)
     }
+
+    const formattedMode = modeType.charAt(0).toUpperCase() + modeType.slice(1)
 
     if (action === 'on') {
       global.db.settings[modeType] = true

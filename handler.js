@@ -16,8 +16,9 @@ export const handler = async (sock, data) => {
 
       if (db.settings.self && !msg.isOwner) return
 
-      if (!db.plugins) {
-        db.plugins = {}
+      if (db.settings.accessOnly && !msg.isOwner) {
+        if (!msg.isGroup) return
+        if (!db.groups[msg.chat]?.access) return
       }
 
       if (db.settings.autoread) {
