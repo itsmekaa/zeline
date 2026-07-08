@@ -70,6 +70,7 @@ export const handler = async (sock, data) => {
       }
     } else if (data.id && data.participants && data.action) {
       if (db.settings.self) return
+      if (db.settings.accessOnly && !db.groups[data.id]?.access) return
 
       await notify(sock, data, db, config)
     }
