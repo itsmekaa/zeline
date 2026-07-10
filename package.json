@@ -1,6 +1,6 @@
 {
   "name": "zeline",
-  "version": "2.0-nightly",
+  "version": "2.0-stable",
   "description": "Modern WhatsApp Bot using Baileys (ESM) with feature-rich automation, media processing, and plugin system",
   "main": "index.js",
   "type": "module",
