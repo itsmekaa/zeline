@@ -10,8 +10,13 @@ export const run = {
   run: async (m, { prefix, command, args }) => {
     const group = global.db.groups[m.chat]
 
+    const hiddenModes = ['access']
+
     const validModes = Object.keys(group)
-      .filter(key => typeof group[key] === 'boolean')
+      .filter(key =>
+        typeof group[key] === 'boolean' &&
+        !hiddenModes.includes(key)
+      )
 
     const textModes = ['welcome', 'leave']
 
