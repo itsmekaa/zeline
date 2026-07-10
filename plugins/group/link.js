@@ -6,6 +6,7 @@ export const run = {
         group: true,
         botAdmin: true
     },
+    description: 'get this group invite link',
     run: async (m, { sock }) => {
         m.reply(`https://chat.whatsapp.com/${await sock.groupInviteCode(m.chat)}`)
     }

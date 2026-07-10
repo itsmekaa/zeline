@@ -5,6 +5,7 @@ export const run = {
     admin: true,
     group: true
   },
+  description: 'add meta ai in group',
   run: async (m, { sock }) => {
     const result = await sock.groupParticipantsUpdate(
       m.chat,

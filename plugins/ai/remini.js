@@ -2,6 +2,7 @@ export const run = {
   cmd: ['remini'],
   hidden: ['upscale', 'hd'],
   category: 'ai',
+  description: 'enhance image quality',
   run: async (m, { prefix, command }) => {
     if (
       !(

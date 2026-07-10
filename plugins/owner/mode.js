@@ -1,6 +1,7 @@
 export const run = {
   cmd: ['mode'],
   category: 'owner',
+  description: 'manage bot settings',
   settings: {
     owner: true
   },

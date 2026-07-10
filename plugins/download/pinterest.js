@@ -2,6 +2,7 @@ export const run = {
   cmd: ['pinterest'],
   hidden: ['pin'],
   category: 'download',
+  description: 'download or search pinterest post',
   run: async (m, { prefix, command, sock, text }) => {
     if (!text)
       return m.reply(Func.usage(prefix, command, '(send query / url)'))

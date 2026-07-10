@@ -2,6 +2,7 @@ export const run = {
   cmd: ['instagram'],
   hidden: ['ig', 'igdl'],
   category: 'download',
+  description: 'download instagram post',
   run: async (m, { sock, prefix, command, text }) => {
     if (!text || !Func.validUrl(text, 'instagram.com'))
       return m.reply(

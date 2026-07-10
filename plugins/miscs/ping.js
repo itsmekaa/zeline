@@ -4,6 +4,7 @@ export const run = {
   cmd: ['ping'],
   hidden: ['p'],
   category: 'miscs',
+  description: 'show server status',
   run: async (m, { sock }) => {
 
     const totalMem = os.totalmem()

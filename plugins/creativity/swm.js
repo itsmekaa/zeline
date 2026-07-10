@@ -2,6 +2,7 @@ export const run = {
   cmd: ['swm'],
   hidden: ['wm', 'watermark'],
   category: 'creativity',
+  description: 'change sticker watermark',
   run: async (m, { sock, prefix, command }) => {
     if (
       (
