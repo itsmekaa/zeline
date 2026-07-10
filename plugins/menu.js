@@ -16,9 +16,17 @@ export const run = {
     const categories = {}
 
     for (const [, plugin] of globalThis.plugins.entries()) {
-      if (plugin.category && plugin.cmd) {
-        if (!categories[plugin.category]) categories[plugin.category] = []
-        categories[plugin.category].push(...plugin.cmd)
+      if (!plugin.category || !plugin.cmd) continue
+
+      if (!categories[plugin.category]) {
+        categories[plugin.category] = []
+      }
+
+      for (const cmd of plugin.cmd) {
+        categories[plugin.category].push({
+          cmd,
+          description: plugin.description || 'no description'
+        })
       }
     }
 
@@ -34,11 +42,13 @@ export const run = {
     for (const cat of Object.keys(categories).sort()) {
       text += `*- menu ${cat}*\n`
 
-      const cmds = [...new Set(categories[cat])].sort()
+      const cmds = categories[cat]
+        .filter((v, i, arr) => arr.findIndex(x => x.cmd === v.cmd) === i)
+        .sort((a, b) => a.cmd.localeCompare(b.cmd))
 
-      cmds.forEach((cmd, i) => {
+      cmds.forEach((item, i) => {
         const last = i === cmds.length - 1
-        text += `${last ? ' └' : ' │'} • ${m.prefix || config.prefix[0]}${cmd}\n`
+        text += `${last ? ' └' : ' │'} • ${m.prefix || config.prefix[0]}${item.cmd} - (${item.description})\n`
       })
 
       text += '\n'

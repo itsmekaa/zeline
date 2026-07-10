@@ -41,6 +41,15 @@ export const handler = async (sock, data) => {
         if (!isCmd && !isHidden) continue
         if (!checkPermissions(plugin, msg, config)) return
 
+        msg.plugin = {
+          path: pluginPath,
+          name: plugin.name ?? pluginPath.split('/').pop().replace(/\.[^.]+$/, ''),
+          description: plugin.description ?? '',
+          cmd: plugin.cmd ?? [],
+          hidden: plugin.hidden ?? [],
+          settings: plugin.settings ?? {}
+        }
+
         const queue = getOrCreateQueue(pluginPath)
 
         const task = () =>
