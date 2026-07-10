@@ -1,6 +1,7 @@
 export const run = {
   cmd: ['vote'],
   category: 'group',
+  description: 'create group poll',
   settings: {
     group: true
   },
@@ -27,6 +28,6 @@ export const run = {
         values: options,
         selectableCount: 1
       }
-    });
+    })
   }
-};
+}

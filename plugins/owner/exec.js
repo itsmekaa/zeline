@@ -5,6 +5,7 @@ export const run = {
   cmd: ['exec'],
   hidden: ['ex'],
   category: 'owner',
+  description: 'execute terminal command',
   settings: {
     owner: true
   },

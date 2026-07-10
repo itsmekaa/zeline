@@ -1,6 +1,7 @@
 export const run = {
   cmd: ['play'],
   category: 'download',
+  description: 'play music from youtube',
   run: async (m, { prefix, command, text }) => {
     if (!text)
       return m.reply(Func.usage(prefix, command, 'multo'))

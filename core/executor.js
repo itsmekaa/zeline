@@ -9,7 +9,7 @@ function trackPluginUsage(pluginName, ok) {
 }
 
 export async function executeCommand(pluginPath, plugin, msg, sock, config) {
-  const pluginName = pluginPath.split(/[\\/]/).pop().replace(/\.[^.]+$/, '')
+  const pluginName = plugin.cmd?.[0] ?? pluginPath.split(/[\\/]/).pop().replace(/\.[^.]+$/, '')
   const shouldTrack = !plugin?.settings?.owner
   const isStats = pluginName === 'stats'
 

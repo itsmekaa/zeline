@@ -2,6 +2,7 @@ export const run = {
   cmd: ['sticker'],
   hidden: ['s'],
   category: 'creativity',
+  description: 'create sticker',
   run: async (m, { sock, prefix, command }) => {
     if (
       !m.quoted &&

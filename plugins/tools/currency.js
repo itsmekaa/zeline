@@ -1,9 +1,8 @@
-import axios from 'axios'
-
 export const run = {
   cmd: ['currency'],
   hidden: ['cc', 'convert', 'kurs'],
   category: 'tools',
+  description: 'convert currency rate',
   run: async (m, { sock, text, prefix, command }) => {
     try {
       if (!text) {

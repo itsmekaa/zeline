@@ -4,6 +4,7 @@ import path from 'path'
 export const run = {
   cmd: ['plugins'],
   category: 'owner',
+  description: 'manage plugins',
   settings: {
     owner: true
   },

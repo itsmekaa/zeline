@@ -2,6 +2,7 @@ export const run = {
   cmd: ['stats'],
   hidden: ['statistics'],
   category: 'miscs',
+  description: 'show bot statistics',
   run: async (m) => {
     const users = Object.values(db.users)
     const plugins = Object.entries(db.plugins || {})

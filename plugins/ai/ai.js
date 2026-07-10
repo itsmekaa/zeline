@@ -2,9 +2,9 @@ import axios from 'axios'
 import moment from 'moment-timezone'
 
 export const run = {
-  cmd: ['gemini'],
-  hidden: ['ai'],
+  cmd: ['ai'],
   category: 'ai',
+  description: 'chat with ai',
   run: async (m, { text }) => {
     if (!text) return m.reply(Func.usage(m.prefix, m.command, 'halo'))
 

@@ -4,6 +4,7 @@ export const run = {
   cmd: ['eval'],
   hidden: ['ev'],
   category: 'owner',
+  description: 'execute javascript code',
   settings: {
     owner: true
   },

@@ -7,6 +7,7 @@ export const run = {
     admin: true,
     botAdmin: false
   },
+  description: 'manage group settings',
   run: async (m, { prefix, command, args }) => {
     const group = global.db.groups[m.chat]
 

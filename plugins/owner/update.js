@@ -3,7 +3,7 @@ import path from 'path'
 import crypto from 'crypto'
 
 const repo = 'itsmekaa/zeline'
-const branch = 'main'
+const branch = '2.0-stable'
 const exclude = ['.env']
 
 const sha256 = str => crypto.createHash('sha256').update(str).digest('hex')
@@ -12,6 +12,7 @@ export const run = {
   cmd: ['update'],
   hidden: ['upd'],
   category: 'owner',
+  description: 'update bot files',
   settings: {
     owner: true
   },

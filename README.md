@@ -56,7 +56,7 @@ npm start
 Start with PM2:
 
 ```bash
-pm2 start ecosystem.config.cjs && pm2 logs zeline
+pm2 start pm2.config.cjs && pm2 logs zeline
 ```
 
 ## Project Structure

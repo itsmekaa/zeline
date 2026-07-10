@@ -2,6 +2,7 @@ export const run = {
   cmd: ['toimage'],
   hidden: ['toimg'],
   category: 'tools',
+  description: 'convert sticker to image',
   run: async (m, { prefix, command }) => {
 
     if (
