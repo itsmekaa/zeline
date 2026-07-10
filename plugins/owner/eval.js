@@ -1,3 +1,5 @@
+import util from 'util'
+
 export const run = {
   cmd: ['eval'],
   hidden: ['ev'],
