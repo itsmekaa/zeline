@@ -1,5 +1,18 @@
 import util from 'util'
 
+const safeStringify = (obj) => {
+  const seen = new WeakSet()
+  return JSON.stringify(obj, (key, value) => {
+    if (typeof value === 'function') return undefined
+    if (value instanceof Uint8Array) return `<Buffer ${value.length} bytes>`
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) return '[Circular]'
+      seen.add(value)
+    }
+    return value
+  }, 2)
+}
+
 export const run = {
   cmd: ['eval'],
   hidden: ['ev'],
@@ -19,7 +32,7 @@ export const run = {
       let evaled = await eval(evalCmd)
 
       if (typeof evaled !== 'string') {
-        evaled = util.inspect(evaled, { depth: null, compact: false })
+        evaled = safeStringify(evaled)
       }
 
       await m.reply(String(evaled))
