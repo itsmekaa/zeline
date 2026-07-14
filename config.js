@@ -37,7 +37,6 @@ export default {
       zeline: 'https://api.zeline.eu.cc'
     },
     key: {
-      gemini: process.env.GEMINI_KEY,
       zeline: 'free'
     }
   },
