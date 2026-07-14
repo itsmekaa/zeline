@@ -2,7 +2,7 @@ import * as Func from './lib/function.js'
 globalThis.Func = Func
 global.Func = Func
 
-import configData from './config.js'
+import configData from './lib/config.js'
 globalThis.config = configData
 global.config = configData
 
@@ -22,7 +22,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
 import qrcode from 'qrcode-terminal'
-import { handler } from './handler.js'
+import { handler } from './core/handler.js'
 import { bindSocket } from './lib/baileys.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))

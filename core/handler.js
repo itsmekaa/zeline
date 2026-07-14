@@ -1,9 +1,9 @@
-import { serialize } from './lib/serialize.js'
-import { logger } from './lib/log.js'
-import { getOrCreateQueue } from './core/queue.js'
-import { checkPermissions } from './core/permissions.js'
-import { executeCommand } from './core/executor.js'
-import { notify } from './core/notify.js'
+import { serialize } from '../lib/serialize.js'
+import { logger } from '../lib/log.js'
+import { getOrCreateQueue } from './queue.js'
+import { checkPermissions } from './permissions.js'
+import { executeCommand } from './executor.js'
+import { notify } from './notify.js'
 
 export const handler = async (sock, data) => {
   try {

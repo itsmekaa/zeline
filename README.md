@@ -54,8 +54,6 @@ zeline/
 ├── lib/
 ├── plugins/
 ├── session/
-├── config.js
-├── handler.js
 ├── index.js
 ├── localdb.json
 ├── package.json
