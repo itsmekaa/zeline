@@ -1,5 +1,5 @@
-import axios from 'axios'
-import moment from 'moment-timezone'
+import fs from 'fs/promises'
+import path from 'path'
 
 export const run = {
   cmd: ['ai'],
@@ -9,27 +9,19 @@ export const run = {
     if (!text) return m.reply(Func.usage(m.prefix, m.command, 'halo'))
 
     try {
-      const { data } = await axios.post(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${config.api.key.gemini}`,
-        {
-          systemInstruction: {
-            parts: [{
-              text: `Kamu adalah asisten AI yang terhubung dengan WhatsApp. Waktu saat ini di zona ${config.tz} adalah ${moment().tz(config.tz).format('dddd, DD MMMM YYYY HH:mm:ss')}. Jawab dengan santai dan natural.`
-            }]
-          },
-          tools: [{ googleSearch: {} }],
-          contents: [{
-            parts: [{ text }]
-          }]
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      )
+      const media = m.quoted?.message?.imageMessage ? m.quoted : m.message?.imageMessage ? m : null
 
-      await m.reply(data.candidates[0].content.parts[0].text.trim())
+      const imageUrl = media ? await uploader.uguu(await media.download()) : null
+
+      const data = await Func.fetchJson(`${config.api.baseUrl.zeline}/api/ai/ai?${new URLSearchParams({
+        text,
+        search: 'true',
+        prompt: await fs.readFile(path.join(process.cwd(), 'media', 'prompt.txt'), 'utf-8'),
+        key: config.api.key.zeline,
+        ...(imageUrl && { imageUrl })
+      })}`)
+
+      await m.reply(data.results.text.trim())
     } catch (e) {
       console.error(e)
       throw e
