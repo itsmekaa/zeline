@@ -27,23 +27,10 @@ npm install
 Edit `.env` file:
 
 ```env
-BOT=62xx
-OWNER=62xx
-GEMINI_KEY=your_api_key
-DATABASE_URL=mongodb_url # leave empty if use localdb.json
+BOT = '62xxx'
+OWNER = '62xxx'
+DATABASE_URL = 'mongodb_url' # leave empty if use localdb.json
 ```
-
-> [!NOTE]
-> This project uses the Gemini API for AI-powered features.
->
-> Get your Gemini API Key here:
-> https://aistudio.google.com/app/api-keys
-> Then add it to your `.env` file:
-> ```env
-> GEMINI_KEY=your_api_key_here
-
-> [!IMPORTANT]
-> 🔐 Keep your API key private and don't share with other people
 
 ## Running Bot
 
