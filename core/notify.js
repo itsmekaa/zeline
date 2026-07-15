@@ -1,5 +1,5 @@
 export const notify = async (sock, data, db, config) => {
-  const { id, participants, action } = data
+  const { id, participants, action, subject } = data
 
   const formatText = (text, values = {}) => {
     return text
@@ -40,11 +40,15 @@ export const notify = async (sock, data, db, config) => {
     }
 
     if (action === 'promote') {
-      text = `@${username} is now an *admin*!`
+      text = `@${username} is now an *admin*`
     }
 
     if (action === 'demote') {
-      text = `@${username} is no longer an *admin*.`
+      text = `@${username} is no longer an *admin*`
+    }
+
+    if (action === 'subject') {
+      text = `@${username} changed group name to *${subject || metadata.subject}*`
     }
 
     if (!text) continue

@@ -123,6 +123,19 @@ const startBot = async () => {
   sock.ev.on('group-participants.update', async (update) => {
     await handler(sock, update)
   })
+  sock.ev.on('groups.update', async (updates) => {
+    for (const update of updates) {
+      if (update.subject) {
+        const metadata = await sock.groupMetadata(update.id)
+        await handler(sock, {
+          id: update.id,
+          action: 'subject',
+          subject: update.subject,
+          participants: [{ phoneNumber: metadata.subjectOwnerPn }]
+        })
+      }
+    }
+  })
 }
 
 process.on('uncaughtException', () => {})
