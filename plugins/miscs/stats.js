@@ -37,10 +37,11 @@ export const run = {
       .sort((a, b) => (b[1].total || 0) - (a[1].total || 0))
       .slice(0, 5)
       .map(
-        ([name, plugin], i) => `${i + 1}. ${name}
-   • Used : ${(plugin.total || 0).toLocaleString()}x
-   • Success : ${(plugin.success || 0).toLocaleString()}
-   • Error : ${(plugin.error || 0).toLocaleString()}`
+        ([name, plugin], i) =>
+`› ${name}
+- *Used*: ${(plugin.total || 0).toLocaleString()}x
+- *Success*: ${(plugin.success || 0).toLocaleString()}
+- *Error*: ${(plugin.error || 0).toLocaleString()}`
       )
       .join('\n\n') || '-'
 
@@ -49,29 +50,26 @@ export const run = {
       .sort((a, b) => b[1].lastUsed - a[1].lastUsed)
       .slice(0, 5)
       .map(
-        ([name, plugin], i) => `${i + 1}. ${name}
-   • ${formatTime(plugin.lastUsed)}`
+        ([name, plugin]) =>
+`› ${name}
+- *Time*: ${formatTime(plugin.lastUsed)}`
       )
       .join('\n\n') || '-'
 
     const text = `
-*Bot Statistics*
+\`Bot Statistics\`
+- *Users*: ${totalUsers.toLocaleString()}
+- *Chats*: ${totalChats.toLocaleString()}
 
-- Users : ${totalUsers.toLocaleString()}
-- Chat Received : ${totalChats.toLocaleString()}
+\`Plugin Statistics\`
+- *Total Hit*: ${totalUsed.toLocaleString()}
+- *Success*: ${totalSuccess.toLocaleString()}
+- *Error*: ${totalError.toLocaleString()}
 
-*Plugin Statistics*
-
-- Total Hit : ${totalUsed.toLocaleString()}
-- Success : ${totalSuccess.toLocaleString()}
-- Error : ${totalError.toLocaleString()}
-
-*Most Used Plugins*
-
+# *Most Used Plugins*
 ${mostUsed}
 
-*Recently Used Plugins*
-
+# *Recently Used Plugins*
 ${latest}
 `.trim()
 
