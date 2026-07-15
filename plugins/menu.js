@@ -86,7 +86,7 @@ export const run = {
                 linkPreview: {
                     'matched-text': urlB,
                     title: pkg.name,
-                    description: 'WhatsApp Bot',
+                    description: config.style.footer,
                     previewType: 0,
                     jpegThumbnail: fs.readFileSync('media/image/icon.jpg'),
                     highQualityThumbnail: image,
