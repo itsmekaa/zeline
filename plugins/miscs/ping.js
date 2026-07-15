@@ -1,33 +1,78 @@
-import os from 'os'
-
 export const run = {
-  cmd: ['ping'],
-  hidden: ['p'],
+  cmd: ['stats'],
+  hidden: ['statistics'],
   category: 'miscs',
-  description: 'show server status',
-  run: async (m, { sock }) => {
+  description: 'show bot statistics',
+  run: async (m) => {
+    const users = Object.values(db.users)
+    const plugins = Object.entries(db.plugins || {})
 
-    const totalMem = os.totalmem()
-    const freeMem = os.freemem()
-    const usedMem = totalMem - freeMem
-    const memPercent = ((usedMem / totalMem) * 100).toFixed(1)
+    const totalUsers = users.length
+    const totalChats = users.reduce(
+      (sum, user) => sum + (user.totalChat || 0),
+      0
+    )
 
-    const cap = `\`Server Information\`
-* Running On : ${process.env.USER === "root" ? "VPS" : "HOSTING (PANEL)"}
-* Cwd : ${process.cwd()}
-* Hostname : ${os.hostname()}
-* Node Version : ${process.version}
+    const totalUsed = plugins.reduce(
+      (sum, [, plugin]) => sum + (plugin.total || 0),
+      0
+    )
+    const totalSuccess = plugins.reduce(
+      (sum, [, plugin]) => sum + (plugin.success || 0),
+      0
+    )
+    const totalError = plugins.reduce(
+      (sum, [, plugin]) => sum + (plugin.error || 0),
+      0
+    )
 
-\`Management Server\`
-* Bot Speed : ${Date.now() - m.timestamps} ms
-* Uptime Bot : ${Func.toDate(process.uptime())}
-* Uptime Server : ${Func.toDate(os.uptime())}
-* Memory : ${Func.size(usedMem)} / ${Func.size(totalMem)} (${memPercent}%)
-* CPU : ${os.cpus()[0].model} ( ${os.cpus().length} CORE )
-* Release : ${os.release()}
-* Type : ${os.type()}
-* Arch : ${os.arch()}`
+    const formatTime = (timestamp) =>
+      new Date(timestamp).toLocaleString('id-ID', {
+        timeZone: config.tz,
+        dateStyle: 'short',
+        timeStyle: 'medium'
+      }) + ' WIB'
 
-    await m.reply(cap)
+    const mostUsed = [...plugins]
+      .sort((a, b) => (b[1].total || 0) - (a[1].total || 0))
+      .slice(0, 5)
+      .map(
+        ([name, plugin], i) =>
+`› ${name}
+- *Used*: ${(plugin.total || 0).toLocaleString()}x
+- *Success*: ${(plugin.success || 0).toLocaleString()}
+- *Error*: ${(plugin.error || 0).toLocaleString()}`
+      )
+      .join('\n\n') || '-'
+
+    const latest = [...plugins]
+      .filter(([, plugin]) => plugin.lastUsed)
+      .sort((a, b) => b[1].lastUsed - a[1].lastUsed)
+      .slice(0, 5)
+      .map(
+        ([name, plugin]) =>
+`› ${name}
+- *Time*: ${formatTime(plugin.lastUsed)}`
+      )
+      .join('\n\n') || '-'
+
+    const text = `
+\`Bot Statistics\`
+- *Users*: ${totalUsers.toLocaleString()}
+- *Chats*: ${totalChats.toLocaleString()}
+
+\`Plugin Statistics\`
+- *Total Hit*: ${totalUsed.toLocaleString()}
+- *Success*: ${totalSuccess.toLocaleString()}
+- *Error*: ${totalError.toLocaleString()}
+
+# *Most Used Plugins*
+${mostUsed}
+
+# *Recently Used Plugins*
+${latest}
+`.trim()
+
+    await m.reply(text)
   }
 }
