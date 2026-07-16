@@ -27,11 +27,14 @@ export const run = {
           `- size : ${Func.size(download.filesize || 0)}`
       })
 
+      const isDocument = download.filesize > 30 * 1024 * 1024
+
       await m.reply({
-        audio: { url: download.download_url },
+        [isDocument ? 'document' : 'audio']: {
+          url: download.download_url
+        },
         mimetype: 'audio/mpeg',
-        fileName: `${metadata.title}.mp3`,
-        ptt: false
+        fileName: `${metadata.title}.mp3`
       })
     } catch (e) {
       console.error(e)

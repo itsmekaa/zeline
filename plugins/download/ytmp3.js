@@ -25,20 +25,26 @@ export const run = {
       if (metadata.duration > 3600)
         return m.reply('audio duration exceeds 60 minutes')
 
-      await m.reply({
-        image: { url: metadata.thumbnail },
-        caption:
-          `#> YouTube Download\n` +
-          `- title : ${metadata.title || '-'}\n` +
-          `- uploader : ${metadata.uploader || '-'}\n` +
-          `- duration : ${Func.toDate(metadata.duration)}\n` +
-          `- views : ${Func.h2k(metadata.view_count || 0)}\n` +
-          `- likes : ${Func.h2k(metadata.like_count || 0)}\n` +
-          `- description : ${metadata.description || '-'}`
-      })
+      const caption =
+        `#> YouTube Download\n` +
+        `- title : ${metadata.title || '-'}\n` +
+        `- uploader : ${metadata.uploader || '-'}\n` +
+        `- duration : ${Func.toDate(metadata.duration)}\n` +
+        `- views : ${Func.h2k(metadata.view_count || 0)}\n` +
+        `- likes : ${Func.h2k(metadata.like_count || 0)}\n` +
+        `- description : ${metadata.description || '-'}`
 
       await m.reply({
-        audio: { url: download.download_url },
+        image: { url: metadata.thumbnail },
+        caption
+      })
+
+      const isDocument = download.filesize > 30 * 1024 * 1024
+
+      await m.reply({
+        [isDocument ? 'document' : 'audio']: {
+          url: download.download_url
+        },
         mimetype: 'audio/mpeg',
         fileName: `${metadata.title}.mp3`
       })

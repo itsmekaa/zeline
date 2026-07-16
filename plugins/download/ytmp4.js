@@ -25,18 +25,24 @@ export const run = {
       if (metadata.duration > 3600)
         return m.reply('video duration exceeds 60 minutes')
 
+      const caption =
+        `#> YouTube Download\n` +
+        `- title : ${metadata.title || '-'}\n` +
+        `- uploader : ${metadata.uploader || '-'}\n` +
+        `- duration : ${Func.toDate(metadata.duration)}\n` +
+        `- views : ${Func.h2k(metadata.view_count || 0)}\n` +
+        `- likes : ${Func.h2k(metadata.like_count || 0)}\n` +
+        `- description : ${metadata.description || '-'}`
+
+      const isDocument = download.filesize > 30 * 1024 * 1024
+
       await m.reply({
-        video: { url: download.download_url },
+        [isDocument ? 'document' : 'video']: {
+          url: download.download_url
+        },
         mimetype: 'video/mp4',
         fileName: `${metadata.title}.mp4`,
-        caption:
-          `#> YouTube Download\n` +
-          `- title : ${metadata.title || '-'}\n` +
-          `- uploader : ${metadata.uploader || '-'}\n` +
-          `- duration : ${Func.toDate(metadata.duration)}\n` +
-          `- views : ${Func.h2k(metadata.view_count || 0)}\n` +
-          `- likes : ${Func.h2k(metadata.like_count || 0)}\n` +
-          `- description : ${metadata.description || '-'}`
+        caption
       })
     } catch (e) {
       console.error(e)
