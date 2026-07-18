@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['acc'],
   category: 'owner',
-  description: 'manage group access',
+  description: 'manage access',
   settings: {
     owner: true,
     group: true

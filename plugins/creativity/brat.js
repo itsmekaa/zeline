@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['brat'],
   category: 'creativity',
-  description: 'create brat sticker',
+  description: 'text',
   run: async (m, { sock, text, prefix, command }) => {
     if (!text)
       return m.reply(Func.usage(prefix, command, 'hello world'))

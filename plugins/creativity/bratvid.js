@@ -2,7 +2,7 @@ export const run = {
   cmd: ['bratvid'],
   hidden: ['bratvideo'],
   category: 'creativity',
-  description: 'create animated brat sticker',
+  description: 'text',
   run: async (m, { sock, text, prefix, command }) => {
     if (!text)
       return m.reply(Func.usage(prefix, command, 'hello world'))

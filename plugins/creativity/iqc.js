@@ -4,7 +4,7 @@ export const run = {
   cmd: ['iqc'],
   hidden: ['iphonequoted'],
   category: 'creativity',
-  description: 'create iphone quote',
+  description: 'text',
   run: async (m, { text, prefix, command }) => {
     if (!text)
       return m.reply(Func.usage(prefix, command, 'kelaz kink'))

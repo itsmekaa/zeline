@@ -5,7 +5,7 @@ export const run = {
   cmd: ['tiktoksearch'],
   hidden: ['tts'],
   category: 'search',
-  description: 'search tiktok videos',
+  description: 'query',
   run: async (m, { text, command, prefix }) => {
     if (!text) {
       return m.reply(Func.usage(prefix, command, 'video cinematic'))

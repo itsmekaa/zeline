@@ -6,7 +6,7 @@ export const run = {
     botAdmin: true,
     group: true
   },
-  description: 'kick members from group',
+  description: 'reply chat',
   run: async (m, { sock, prefix, command, text }) => {
     let targets = m.message?.extendedTextMessage?.contextInfo?.mentionedJid || m.mentionedJid || [];
 

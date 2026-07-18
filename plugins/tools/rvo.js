@@ -2,7 +2,7 @@ export const run = {
   cmd: ['rvo'],
   hidden: ['vv'],
   category: 'tools',
-  description: 'send view once media',
+  description: 'reply view once',
   run: async (m, { prefix, command }) => {
     const q = m.quoted
 

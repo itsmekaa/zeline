@@ -30,7 +30,7 @@ export const run = {
             for (const cmd of plugin.cmd) {
                 categories[plugin.category].push({
                     cmd,
-                    description: plugin.description || 'no description'
+                    description: plugin.description || '(no description)'
                 })
             }
         }
@@ -57,7 +57,7 @@ export const run = {
             text += `# *${cat.charAt(0).toUpperCase() + cat.slice(1)}* (${cmds.length})\n`
 
             cmds.forEach(item => {
-                text += `› ${m.prefix + item.cmd} - *${item.description}*\n`
+                text += `› ${m.prefix + item.cmd} - *(${item.description})*\n`
             })
 
             text += '\n'

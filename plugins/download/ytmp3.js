@@ -2,7 +2,7 @@ export const run = {
   cmd: ['ytmp3'],
   hidden: ['yta'],
   category: 'download',
-  description: 'download youtube audio',
+  description: 'url',
   run: async (m, { text, prefix, command }) => {
     if (
       !text ||

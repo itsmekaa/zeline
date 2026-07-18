@@ -2,7 +2,7 @@ export const run = {
   cmd: ['ytmp4'],
   hidden: ['ytv'],
   category: 'download',
-  description: 'download youtube video',
+  description: 'url',
   run: async (m, { text, prefix, command }) => {
     if (
       !text ||

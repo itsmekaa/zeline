@@ -2,7 +2,7 @@ export const run = {
   cmd: ['tiktok'],
   hidden: ['tt', 'ttdl'],
   category: 'download',
-  description: 'download tiktok post',
+  description: 'url',
   run: async (m, { sock, prefix, command, text }) => {
     if (!text || !Func.validUrl(text, 'tiktok.com'))
       return m.reply(

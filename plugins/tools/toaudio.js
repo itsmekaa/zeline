@@ -6,7 +6,7 @@ export const run = {
   cmd: ['toaudio'],
   hidden: ['tomp3'],
   category: 'tools',
-  description: 'convert video to audio',
+  description: 'reply video',
   run: async (m, { prefix, command }) => {
     if (
       !(

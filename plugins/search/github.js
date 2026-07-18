@@ -7,7 +7,7 @@ export const run = {
   cmd: ['githubsearch'],
   hidden: ['ghs'],
   category: 'search',
-  description: 'search github repositories',
+  description: 'query',
   run: async (m, { text, command, prefix }) => {
     try {
       if (!text) {

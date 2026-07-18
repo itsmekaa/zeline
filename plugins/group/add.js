@@ -5,7 +5,7 @@ export const run = {
     admin: true,
     group: true
   },
-  description: 'add members to group',
+  description: 'number',
   run: async (m, { sock, prefix, command, text }) => {
     let targets = m.message?.extendedTextMessage?.contextInfo?.mentionedJid || m.mentionedJid || [];
 
