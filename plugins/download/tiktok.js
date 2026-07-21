@@ -43,10 +43,17 @@ export const run = {
         })
       }
 
+      const sizeLimit =
+        (Number(process.env.SIZE_LIMIT) || 30) * 1024 * 1024
+
+      const isDocument = (results.size || 0) > sizeLimit
+
       await m.reply({
-        video: {
+        [isDocument ? 'document' : 'video']: {
           url: results.media.find(({ type }) => type === 'video').url
         },
+        mimetype: 'video/mp4',
+        fileName: `${results.title || 'tiktok'}.mp4`,
         caption
       })
     } catch (e) {

@@ -39,7 +39,10 @@ export const run = {
         caption
       })
 
-      const isDocument = download.filesize > 30 * 1024 * 1024
+      const sizeLimit =
+        (Number(process.env.SIZE_LIMIT) || 30) * 1024 * 1024
+
+      const isDocument = download.filesize > sizeLimit
 
       await m.reply({
         [isDocument ? 'document' : 'audio']: {
