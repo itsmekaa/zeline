@@ -1,34 +1,35 @@
 import os from 'os'
-import fs from 'fs'
 
 export const run = {
-  cmd: ['ping'],
-  hidden: ['p'],
-  category: 'miscs',
-  description: 'show server status',
-  run: async (m, { sock }) => {
+ cmd: ['ping'],
+ hidden: ['p'],
+ category: 'miscs',
+ description: 'show server status',
+ run: async (m, { sock }) => {
+ const totalMem = process.env.SERVER_MEMORY * 1024 * 1024 || os.totalmem()
+ const usedMem = process.memoryUsage().rss
 
-    const totalMem = os.totalmem()
-    const freeMem = os.freemem()
-    const usedMem = totalMem - freeMem
-    const memPercent = ((usedMem / totalMem) * 100).toFixed(1)
+ const loadAvg = os.loadavg()
+ const loadText = loadAvg.map(v => v.toFixed(2)).join(', ')
 
-    const cap = `\`Server Information\`
+ const cap = `\`Server Information\`
 * Running On : ${process.env.USER === "root" ? "VPS" : "HOSTING (PANEL)"}
 * Cwd : ${process.cwd()}
 * Hostname : ${os.hostname()}
 * Node Version : ${process.version}
+* Platform : ${os.platform()}
+* Tmp Dir : ${os.tmpdir()}
+* Load Average : ${loadText}
 
 \`Management Server\`
 * Bot Speed : ${Date.now() - m.timestamps} ms
 * Uptime Bot : ${Func.toDate(process.uptime())}
 * Uptime Server : ${Func.toDate(os.uptime())}
-* Memory : ${Func.size(usedMem)} / ${Func.size(totalMem)} (${memPercent}%)
+* Memory : ${(usedMem / 1024 / 1024).toFixed(0)} MiB / ${(totalMem / 1024 / 1024).toFixed(0)} MiB
 * CPU : ${os.cpus()[0].model} ( ${os.cpus().length} CORE )
 * Release : ${os.release()}
-* Type : ${os.type()}
 * Arch : ${os.arch()}`
 
-    await m.reply(cap)
-  }
+ await m.reply(cap)
+ }
 }
