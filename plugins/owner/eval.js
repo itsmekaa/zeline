@@ -1,4 +1,5 @@
 import util from 'util'
+import { exec } from 'child_process'
 
 const safeStringify = (obj) => {
   const seen = new WeakSet()
@@ -14,30 +15,51 @@ const safeStringify = (obj) => {
 }
 
 export const run = {
-  cmd: ['eval'],
-  hidden: ['ev'],
-  category: 'owner',
-  description: 'execute javascript code',
-  settings: {
-    owner: true
-  },
-  run: async (m, { sock, command, text }) => {
-    if (!text) return m.reply('enter javascript code.')
+  event: async (m, { sock }) => {
+    if (!m.isOwner || !m.text) return false
 
-    try {
-      const evalCmd = (command === 'ev')
-        ? (async () => { return eval(`(${text})`) })()
-        : (async () => { return eval(`(async () => { ${text} })()`) })()
+    let prefix = null
+    let text = null
 
-      let evaled = await eval(evalCmd)
+    if (m.text.startsWith('=>')) {
+      prefix = '=>'
+      text = m.text.slice(2).trim()
+    } else if (m.text.startsWith('>')) {
+      prefix = '>'
+      text = m.text.slice(1).trim()
+    } else if (m.text.startsWith('$')) {
+      prefix = '$'
+      text = m.text.slice(1).trim()
+    } else {
+      return false
+    }
 
-      if (typeof evaled !== 'string') {
-        evaled = safeStringify(evaled)
+    if (!text) {
+      await m.reply(prefix === '$' ? 'enter terminal command.' : 'enter javascript code.')
+      return true
+    }
+
+    if (prefix === '=>' || prefix === '>') {
+      try {
+        const evaled = (prefix === '>')
+          ? await eval(`(${text})`)
+          : await (async () => eval(`(async () => { ${text} })()`))()
+
+        const result = typeof evaled !== 'string' ? safeStringify(evaled) : evaled
+        await m.reply(String(result))
+      } catch (e) {
+        await m.reply(util.format(e))
       }
+      return true
+    }
 
-      await m.reply(String(evaled))
-    } catch (e) {
-      await m.reply(util.format(e))
+    if (prefix === '$') {
+      exec(text, (error, stdout, stderr) => {
+        if (stdout) return m.reply(util.format(stdout).trim())
+        if (stderr) return m.reply(util.format(stderr).trim())
+        if (error) return m.reply(util.format(error.message).trim())
+      })
+      return true
     }
   }
 }
