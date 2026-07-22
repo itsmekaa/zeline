@@ -1,23 +1,13 @@
-import fs from 'fs'
-import path from 'path'
 import moment from 'moment-timezone'
-import {
-    prepareWAMessageMedia
-} from 'baileys'
-
-const pkg = JSON.parse(
-    fs.readFileSync(
-        path.resolve(process.cwd(), 'package.json'),
-        'utf8'
-    )
-)
+import pkg from '../package.json'
+with {
+    type: 'json'
+}
 
 export const run = {
     cmd: ['menu'],
     hidden: ['m'],
-    run: async (m, {
-        sock
-    }) => {
+    run: async (m) => {
         const categories = {}
 
         for (const [, plugin] of globalThis.plugins.entries()) {
@@ -37,67 +27,36 @@ export const run = {
 
         const time = moment().tz(config.tz).format('HH:mm:ss')
 
-        let text = `Hi @${m.sender.split('@')[0]} !\n\n`
-        text += '`Bot Information`\n'
-        text += `- *Name*: ${pkg.name}\n`
-        text += `- *Version*: ${pkg.version}\n`
-        text += `- *Prefix*: ${config.prefix.join(' · ')}\n`
-        text += `- *Time*: ${time}\n\n`
+        let caption = `Hi @${m.sender.split('@')[0]} !\n\n`
+        caption += '`Bot Information`\n'
+        caption += `- *Name*: ${pkg.name}\n`
+        caption += `- *Version*: ${pkg.version}\n`
+        caption += `- *Prefix*: ${config.prefix.join(' · ')}\n`
+        caption += `- *Time*: ${time}\n\n`
 
-        text += '`User Information`\n'
-        text += `- *Name*: ${m.pushName}\n`
-        text += `- *Number*: ${m.sender.split('@')[0]}\n`
-        text += `- *Status*: ${m.isOwner ? 'Owner' : 'Free User'}\n\n`
+        caption += '`User Information`\n'
+        caption += `- *Name*: ${m.pushName}\n`
+        caption += `- *Number*: ${m.sender.split('@')[0]}\n`
+        caption += `- *Status*: ${m.isOwner ? 'Owner' : 'Free User'}\n\n`
 
         for (const cat of Object.keys(categories).sort()) {
             const cmds = categories[cat]
                 .filter((v, i, arr) => arr.findIndex(x => x.cmd === v.cmd) === i)
                 .sort((a, b) => a.cmd.localeCompare(b.cmd))
 
-            text += `# *${cat.charAt(0).toUpperCase() + cat.slice(1)}* (${cmds.length})\n`
+            caption += `# *${cat.charAt(0).toUpperCase() + cat.slice(1)}* (${cmds.length})\n`
 
             cmds.forEach(item => {
-                text += `› ${m.prefix + item.cmd} - *(${item.description})*\n`
+                caption += `› ${m.prefix + item.cmd} - *(${item.description})*\n`
             })
 
-            text += '\n'
+            caption += '\n'
         }
 
-        const urlB = 'https://github.com/itsmekaa/zeline'
+        caption += `> ${config.style.footer}`
 
-        const {
-            imageMessage: image
-        } = await prepareWAMessageMedia({
-            image: {
-                url: 'media/image/icon.jpg'
-            }
-        }, {
-            upload: sock.waUploadToServer,
-            mediaTypeOverride: 'thumbnail-link'
+        await m.reply(caption.trim(), {
+            mentions: [m.sender]
         })
-
-        image.height = 405
-        image.width = 720
-
-        await sock.sendMessage(
-            m.chat, {
-                text: urlB + ` ${text.trim()}`,
-                mentions: [m.sender],
-                linkPreview: {
-                    'matched-text': urlB,
-                    title: pkg.name,
-                    description: config.style.footer,
-                    previewType: 0,
-                    jpegThumbnail: fs.readFileSync('media/image/icon.jpg'),
-                    highQualityThumbnail: image,
-                    linkPreviewMetadata: {
-                        linkMediaDuration: 0,
-                        socialMediaPostType: 0
-                    }
-                }
-            }, {
-                quoted: m
-            }
-        )
     }
 }
