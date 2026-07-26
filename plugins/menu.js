@@ -20,18 +20,17 @@ export const run = {
             for (const cmd of plugin.cmd) {
                 categories[plugin.category].push({
                     cmd,
-                    description: plugin.description || '(no description)'
+                    usage: plugin.usage || 'no description'
                 })
             }
         }
 
-        const time = moment().tz(config.tz).format('HH:mm:ss')
+        const time = moment().tz(tz).format('HH:mm:ss')
 
         let caption = `Hi @${m.sender.split('@')[0]} !\n\n`
         caption += '`Bot Information`\n'
         caption += `- *Name*: ${pkg.name}\n`
-        caption += `- *Version*: ${pkg.version}\n`
-        caption += `- *Prefix*: ${config.prefix.join(' · ')}\n`
+        caption += `- *Prefix*: ${prefix.join(' · ')}\n`
         caption += `- *Time*: ${time}\n\n`
 
         caption += '`User Information`\n'
@@ -47,13 +46,13 @@ export const run = {
             caption += `# *${cat.charAt(0).toUpperCase() + cat.slice(1)}* (${cmds.length})\n`
 
             cmds.forEach(item => {
-                caption += `› ${m.prefix + item.cmd} - *(${item.description})*\n`
+                caption += `› ${m.prefix + item.cmd} - *(${item.usage})*\n`
             })
 
             caption += '\n'
         }
 
-        caption += `> ${config.style.footer}`
+        caption += `> ${style.footer}`
 
         await m.reply(caption.trim(), {
             mentions: [m.sender]

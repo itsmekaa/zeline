@@ -4,22 +4,23 @@ export const run = {
   cmd: ['iqc'],
   hidden: ['iphonequoted'],
   category: 'creativity',
-  description: 'text',
+  usage: 'text',
   run: async (m, { text, prefix, command }) => {
     if (!text)
       return m.reply(Func.usage(prefix, command, 'kelaz kink'))
 
-    m.react(config.emoji)
+    m.react(emoji)
 
     try {
-      await m.reply({
-        image: await Func.fetchBuffer(
-          `${config.api.baseUrl.zeline}/api/canvas/iqc?text=${encodeURIComponent(text)}&time=${moment().tz(config.tz).format('HH:mm')}&key=${config.api.key.zeline}`
-        )
+      const res = await Api('/iqc', {
+        text,
+        time: moment().tz(tz).format('HH:mm')
       })
+
+      await m.reply({ image: { url: res.results.url } })
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

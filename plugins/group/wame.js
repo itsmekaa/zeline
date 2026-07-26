@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['wame'],
   category: 'group',
-  description: 'create your whatsapp link',
+  usage: 'create whatsapp link',
   settings: {
     group: true
   },

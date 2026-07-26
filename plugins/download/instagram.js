@@ -2,19 +2,17 @@ export const run = {
   cmd: ['instagram'],
   hidden: ['ig', 'igdl'],
   category: 'download',
-  description: 'url',
+  usage: 'url',
   run: async (m, { sock, prefix, command, text }) => {
     if (!text || !Func.validUrl(text, 'instagram.com'))
       return m.reply(
         Func.usage(prefix, command, 'https://www.instagram.com/p/xxxx')
       )
 
-    m.react(config.emoji)
+    m.react(emoji)
 
     try {
-      const { results } = await Func.fetchJson(
-        `${config.api.baseUrl.zeline}/api/downloader/ig?url=${encodeURIComponent(Func.extractUrl(text))}&key=${config.api.key.zeline}`
-      )
+      const { results } = await Api('/ig', { url: Func.extractUrl(text, 'instagram.com')})
 
       const caption = `#> Instagram Download\n- media : ${results.length}`
 
@@ -37,7 +35,7 @@ export const run = {
       })
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

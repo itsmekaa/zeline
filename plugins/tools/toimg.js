@@ -2,7 +2,7 @@ export const run = {
   cmd: ['toimage'],
   hidden: ['toimg'],
   category: 'tools',
-  description: 'reply sticker',
+  usage: 'reply sticker',
   run: async (m, { prefix, command }) => {
 
     if (
@@ -17,7 +17,7 @@ export const run = {
       const mime = msg.type || ''
 
       if (!/sticker/.test(mime)) {
-        return m.reply('❌ Hanya support sticker!')
+        return
       }
 
       const buffer = await msg.download()
@@ -27,8 +27,8 @@ export const run = {
       })
 
     } catch (e) {
-      console.log(e)
-      throw e
+      console.error(e)
+      m.reply(msg.error)
     }
   }
 }

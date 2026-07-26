@@ -2,19 +2,17 @@ export const run = {
   cmd: ['tiktok'],
   hidden: ['tt', 'ttdl'],
   category: 'download',
-  description: 'url',
+  usage: 'url',
   run: async (m, { sock, prefix, command, text }) => {
     if (!text || !Func.validUrl(text, 'tiktok.com'))
       return m.reply(
         Func.usage(prefix, command, 'https://vt.tiktok.com/ZSQqVxbbM/')
       )
 
-    m.react(config.emoji)
+    m.react(emoji)
 
     try {
-      const { results } = await Func.fetchJson(
-        `${config.api.baseUrl.zeline}/api/downloader/tiktok?url=${encodeURIComponent(Func.extractUrl(text))}&key=${config.api.key.zeline}`
-      )
+      const { results } = await Api('/tiktok', { url: Func.extractUrl(text) })
 
       const caption =
         `#> TikTok Download\n` +
@@ -44,7 +42,7 @@ export const run = {
       }
 
       const sizeLimit =
-        (Number(process.env.SIZE_LIMIT) || 30) * 1024 * 1024
+        (Number(process.env.SIZE_LIMIT)) * 1024 * 1024
 
       const isDocument = (results.size || 0) > sizeLimit
 
@@ -58,7 +56,7 @@ export const run = {
       })
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

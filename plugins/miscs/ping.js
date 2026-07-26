@@ -5,7 +5,7 @@ export const run = {
   cmd: ['ping'],
   hidden: ['p'],
   category: 'miscs',
-  description: 'show server status',
+  usage: 'show server status',
   run: async (m, { sock }) => {
     const totalMem = process.env.SERVER_MEMORY * 1024 * 1024 || os.totalmem()
     const usedMem = process.memoryUsage().rss

@@ -2,7 +2,7 @@ export const run = {
   cmd: ['rvo'],
   hidden: ['vv'],
   category: 'tools',
-  description: 'reply view once',
+  usage: 'reply view once',
   run: async (m, { prefix, command }) => {
     const q = m.quoted
 
@@ -31,8 +31,8 @@ export const run = {
         await m.reply({ audio: buffer })
       }
     } catch (e) {
-      console.log(e)
-      throw e
+      console.error(e)
+      m.reply(msg.error)
     }
   }
 }

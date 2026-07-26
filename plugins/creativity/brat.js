@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['brat'],
   category: 'creativity',
-  description: 'text',
+  usage: 'text',
   run: async (m, { sock, text, prefix, command }) => {
     if (!text)
       return m.reply(Func.usage(prefix, command, 'hello world'))
@@ -13,15 +13,15 @@ export const run = {
           `https://skyzxu-brat.hf.space/brat?text=${encodeURIComponent(text)}`
         ),
         {
-          packname: config.sticker.packname,
-          author: config.sticker.author,
+          packname: sticker.packname,
+          author: sticker.author,
           ai: true,
           quoted: m
         }
       )
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

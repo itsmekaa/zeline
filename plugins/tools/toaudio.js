@@ -6,7 +6,7 @@ export const run = {
   cmd: ['toaudio'],
   hidden: ['tomp3'],
   category: 'tools',
-  description: 'reply video',
+  usage: 'reply video',
   run: async (m, { prefix, command }) => {
     if (
       !(
@@ -17,7 +17,7 @@ export const run = {
       return m.reply(Func.usage(prefix, command, '(reply / send video)'))
     }
 
-    m.react(config.emoji)
+    m.react(emoji)
 
     try {
       const media = m.quoted && m.quoted.type === 'videoMessage' ? m.quoted : m
@@ -46,8 +46,8 @@ export const run = {
       fs.unlinkSync(tmpVid)
       fs.unlinkSync(tmpAud)
     } catch (e) {
-      console.log(e)
-      throw e
+      console.error(e)
+      m.reply(msg.error)
     }
   }
 }

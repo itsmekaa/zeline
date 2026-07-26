@@ -16,9 +16,9 @@ export const handler = async (sock, data) => {
 
       if (db.settings.self && !msg.isOwner) return
 
-      if (db.settings.accessOnly && !msg.isOwner) {
+      if (db.settings.whitelist.enabled && !msg.isOwner) {
         if (!msg.isGroup) return
-        if (!db.groups[msg.chat]?.access) return
+        if (!db.settings.whitelist.id.includes(msg.chat)) return
       }
 
       if (db.settings.autoread) {
@@ -39,12 +39,12 @@ export const handler = async (sock, data) => {
         const isHidden = plugin?.hidden?.includes(msg.command)
 
         if (!isCmd && !isHidden) continue
-        if (!checkPermissions(plugin, msg, config)) return
+        if (!checkPermissions(plugin, msg)) return
 
         msg.plugin = {
           path: pluginPath,
           name: plugin.name ?? pluginPath.split('/').pop().replace(/\.[^.]+$/, ''),
-          description: plugin.description ?? '',
+          usage: plugin.usage ?? '',
           cmd: plugin.cmd ?? [],
           hidden: plugin.hidden ?? [],
           settings: plugin.settings ?? {}
@@ -53,7 +53,7 @@ export const handler = async (sock, data) => {
         const queue = getOrCreateQueue(pluginPath)
 
         const task = () =>
-          executeCommand(pluginPath, plugin, msg, sock, config)
+          executeCommand(pluginPath, plugin, msg, sock)
 
         if (db.settings.queue) {
           queue.items.push({ task })
@@ -79,9 +79,9 @@ export const handler = async (sock, data) => {
       }
     } else if (data.id && data.participants && data.action) {
       if (db.settings.self) return
-      if (db.settings.accessOnly && !db.groups[data.id]?.access) return
+      if (db.settings.whitelist.enabled && !db.settings.whitelist.id.includes(data.id)) return
 
-      await notify(sock, data, db, config)
+      await notify(sock, data, db)
     }
   } catch (error) {
     console.error(error)

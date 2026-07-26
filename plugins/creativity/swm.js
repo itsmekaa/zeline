@@ -2,7 +2,7 @@ export const run = {
   cmd: ['swm'],
   hidden: ['wm', 'watermark'],
   category: 'creativity',
-  description: 'reply sticker',
+  usage: 'reply sticker',
   run: async (m, { sock, prefix, command }) => {
     if (
       (
@@ -40,8 +40,8 @@ export const run = {
         quoted: m
       })
     } catch (e) {
-      console.log(e)
-      throw e
+      console.error(e)
+      m.reply(msg.error)
     }
   }
 }

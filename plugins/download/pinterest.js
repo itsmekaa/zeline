@@ -2,12 +2,12 @@ export const run = {
   cmd: ['pinterest'],
   hidden: ['pin'],
   category: 'download',
-  description: 'send url / query',
+  usage: 'url / query',
   run: async (m, { prefix, command, sock, text }) => {
     if (!text)
-      return m.reply(Func.usage(prefix, command, '(send query / url)'))
+      return m.reply(Func.usage(prefix, command, '(url / query)'))
 
-    m.react(config.emoji)
+    m.react(emoji)
 
     try {
       if (
@@ -16,9 +16,7 @@ export const run = {
       ) {
         const {
           results: { title, author, media }
-        } = await Func.fetchJson(
-          `${config.api.baseUrl.zeline}/api/downloader/pinterest?url=${encodeURIComponent(text)}&key=${config.api.key.zeline}`
-        )
+        } = await Api('/pinterest', { url: text })
 
         const caption =
           `#> Pinterest Download\n` +
@@ -47,13 +45,11 @@ export const run = {
 
       const {
         results: { data = [] }
-      } = await Func.fetchJson(
-        `${config.api.baseUrl.zeline}/api/search/pinterest?query=${encodeURIComponent(text)}&key=${config.api.key.zeline}`
-      )
+      } = await Api('/pins', { query: text })
 
       if (!data.length) return m.reply('no results found')
 
-      const result = data.slice(0, 4)
+      const result = data.slice(0, 10)
 
       await (result.length > 1
         ? sock.sendAlbum(
@@ -88,7 +84,7 @@ export const run = {
           }))
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

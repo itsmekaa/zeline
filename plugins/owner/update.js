@@ -12,7 +12,7 @@ export const run = {
   cmd: ['update'],
   hidden: ['upd'],
   category: 'owner',
-  description: 'update bot system',
+  usage: 'update bot system',
   settings: {
     owner: true
   },

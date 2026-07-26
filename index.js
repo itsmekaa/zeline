@@ -2,9 +2,7 @@ import * as Func from './lib/function.js'
 globalThis.Func = Func
 global.Func = Func
 
-import configData from './lib/config.js'
-globalThis.config = configData
-global.config = configData
+import './lib/config.js'
 
 import { db } from './lib/schema.js'
 globalThis.db = db
@@ -13,6 +11,10 @@ global.db = db
 import * as uploader from './lib/uploader.js'
 globalThis.uploader = uploader
 global.uploader = uploader
+
+import { Api } from './lib/api.js'
+globalThis.Api = Api
+global.Api = Api
 
 import { makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } from 'baileys'
 import pino from 'pino'
@@ -76,7 +78,7 @@ const startBot = async () => {
   await loadPlugins(path.join(__dirname, 'plugins'))
   watchPlugins()
   console.log(chalk.cyan.bold(`[ INFO ] Berhasil memuat ${plugins.size} plugin.`))
-  const { state, saveCreds } = await useMultiFileAuthState(config.pairing.auth)
+  const { state, saveCreds } = await useMultiFileAuthState(global.pairing.auth)
   const { version } = await fetchLatestBaileysVersion()
   const sock = makeWASocket({
     version,
@@ -86,21 +88,21 @@ const startBot = async () => {
       creds: state.creds,
       keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' }))
     },
-    browser: config.pairing.browser,
+    browser: ['Mac OS', 'Safari', '14.0.0'],
     generateHighQualityLinkPreview: true,
     syncFullHistory: false
   })
   bindSocket(sock)
-  if (!sock.authState.creds.registered && config.pairing.state) {
-    const phoneNumber = config.pairing.number.toString()
+  if (!sock.authState.creds.registered && global.pairing.state) {
+    const phoneNumber = global.pairing.number.toString()
     setTimeout(async () => {
-      const code = await sock.requestPairingCode(phoneNumber, config.pairing.code)
+      const code = await sock.requestPairingCode(phoneNumber, global.pairing.code)
       console.log(chalk.greenBright.bold(`[ ! ] Pairing Code : ${code.match(/.{1,4}/g)?.join('-')}`))
     }, 3000)
   }
   sock.ev.on('connection.update', (update) => {
     const { connection, lastDisconnect, qr } = update
-    if (qr && !config.pairing.state) {
+    if (qr && !global.pairing.state) {
       qrcode.generate(qr, { small: true })
     }
     if (connection === 'close') {
@@ -108,7 +110,7 @@ const startBot = async () => {
       if (shouldReconnect) {
         startBot()
       } else {
-        fs.removeSync(config.pairing.auth)
+        fs.removeSync(global.pairing.auth)
         startBot()
       }
     } else if (connection === 'open') {

@@ -1,8 +1,8 @@
 export const run = {
-  cmd: ['ytmp3'],
-  hidden: ['yta'],
+  cmd: ['yta'],
+  hidden: ['ytmp3'],
   category: 'download',
-  description: 'url',
+  usage: 'url',
   run: async (m, { text, prefix, command }) => {
     if (
       !text ||
@@ -13,14 +13,12 @@ export const run = {
         Func.usage(prefix, command, 'https://youtu.be/PrF3E-otC_E')
       )
 
-    m.react(config.emoji)
+    m.react(emoji)
 
     try {
       const {
         results: { metadata, download }
-      } = await Func.fetchJson(
-        `${config.api.baseUrl.zeline}/api/downloader/ytmp3?url=${encodeURIComponent(text)}&key=${config.api.key.zeline}`
-      )
+      } = await Api('/ytmp3', { url: text })
 
       if (metadata.duration > 3600)
         return m.reply('audio duration exceeds 60 minutes')
@@ -40,7 +38,7 @@ export const run = {
       })
 
       const sizeLimit =
-        (Number(process.env.SIZE_LIMIT) || 30) * 1024 * 1024
+        (Number(process.env.SIZE_LIMIT)) * 1024 * 1024
 
       const isDocument = download.filesize > sizeLimit
 
@@ -53,7 +51,7 @@ export const run = {
       })
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

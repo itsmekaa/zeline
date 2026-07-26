@@ -5,7 +5,7 @@ export const run = {
   cmd: ['tiktoksearch'],
   hidden: ['tts'],
   category: 'search',
-  description: 'query',
+  usage: 'query',
   run: async (m, { text, command, prefix }) => {
     if (!text) {
       return m.reply(Func.usage(prefix, command, 'video cinematic'))
@@ -14,9 +14,7 @@ export const run = {
     try {
       const {
         results: { results: videos = [] } = {}
-      } = await Func.fetchJson(
-        `${config.api.baseUrl.zeline}/api/search/tiktok?keywords=${encodeURIComponent(text)}&key=${config.api.key.zeline}`
-      )
+      } = await Api('/tiktoks', { keywords: text })
 
       if (!videos.length) {
         return m.reply('no results found')
@@ -50,7 +48,7 @@ export const run = {
       }
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

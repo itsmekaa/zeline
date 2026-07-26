@@ -1,7 +1,7 @@
 export const run = {
   cmd: ['vote'],
   category: 'group',
-  description: 'create group poll',
+  usage: 'create group poll',
   settings: {
     group: true
   },

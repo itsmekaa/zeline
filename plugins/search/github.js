@@ -7,7 +7,7 @@ export const run = {
   cmd: ['githubsearch'],
   hidden: ['ghs'],
   category: 'search',
-  description: 'query',
+  usage: 'query',
   run: async (m, { text, command, prefix }) => {
     try {
       if (!text) {
@@ -47,7 +47,7 @@ export const run = {
       }
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

@@ -1,19 +1,17 @@
 export const run = {
   cmd: ['play'],
   category: 'download',
-  description: 'query',
+  usage: 'query',
   run: async (m, { prefix, command, text }) => {
     if (!text)
       return m.reply(Func.usage(prefix, command, 'multo'))
 
-    m.react(config.emoji)
+    m.react(emoji)
 
     try {
       const {
         results: { metadata, download }
-      } = await Func.fetchJson(
-        `${config.api.baseUrl.zeline}/api/downloader/playmusic?query=${encodeURIComponent(text)}&key=${config.api.key.zeline}`
-      )
+      } = await Api('/playmusic', { query: text })
 
       await m.reply({
         image: { url: metadata.thumbnail },
@@ -28,7 +26,7 @@ export const run = {
       })
 
       const sizeLimit =
-        (Number(process.env.SIZE_LIMIT) || 30) * 1024 * 1024
+        (Number(process.env.SIZE_LIMIT)) * 1024 * 1024
 
       const isDocument = download.filesize > sizeLimit
 
@@ -41,7 +39,7 @@ export const run = {
       })
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

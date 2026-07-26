@@ -2,7 +2,7 @@ export const run = {
   cmd: ['sticker'],
   hidden: ['s'],
   category: 'creativity',
-  description: 'send / reply media',
+  usage: 'send / reply media',
   run: async (m, { sock, prefix, command }) => {
     if (
       !m.quoted &&
@@ -31,8 +31,8 @@ export const run = {
         quoted: m
       })
     } catch (e) {
-      console.log(e)
-      throw e
+      console.error(e)
+      m.reply(msg.error)
     }
   }
 }

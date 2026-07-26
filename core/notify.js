@@ -1,4 +1,4 @@
-export const notify = async (sock, data, db, config) => {
+export const notify = async (sock, data, db) => {
   const { id, participants, action, subject } = data
 
   const formatText = (text, values = {}) => {
@@ -14,7 +14,7 @@ export const notify = async (sock, data, db, config) => {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-    timeZone: config.tz
+    timeZone: global.tz
   })
 
   for (const participant of participants) {

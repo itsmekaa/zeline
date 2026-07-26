@@ -2,32 +2,22 @@ export const run = {
   cmd: ['remini'],
   hidden: ['upscale', 'hd'],
   category: 'ai',
-  description: 'reply / send image',
+  usage: 'reply / send image',
   run: async (m, { prefix, command }) => {
-    if (
-      !(
-        m.type === 'imageMessage' ||
-        (m.quoted && m.quoted.type === 'imageMessage')
-      )
-    )
+    if (!(m.type === 'imageMessage' || m.quoted?.type === 'imageMessage'))
       return m.reply(Func.usage(prefix, command, '(reply / send image)'))
 
-    m.react(config.emoji)
+    m.react(emoji)
 
     try {
-      const media =
-        m.quoted?.type === 'imageMessage' ? m.quoted : m
+      const media = m.quoted?.type === 'imageMessage' ? m.quoted : m
+      const url = await uploader.uguu(await media.download())
+      const res = await Api('/remini', { url })
 
-      await m.reply({
-        image: await Func.fetchBuffer(
-          `${config.api.baseUrl.zeline}/api/ai/remini?url=${
-            await uploader.uguu(await media.download())
-          }&key=${config.api.key.zeline}`
-        )
-      })
+      await m.reply({ image: { url: res.results.url } })
     } catch (e) {
       console.error(e)
-      throw e
+      m.reply(msg.error)
     }
   }
 }

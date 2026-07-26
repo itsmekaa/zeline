@@ -2,7 +2,7 @@ export const run = {
   cmd: ['currency'],
   hidden: ['cc', 'convert', 'kurs'],
   category: 'tools',
-  description: 'convert currency rate',
+  usage: 'convert currency rate',
   run: async (m, { sock, text, prefix, command }) => {
     try {
       if (!text) {
@@ -48,8 +48,8 @@ ${amount} ${from} = ${result.toFixed(2)} ${to}`
       )
 
     } catch (err) {
-      console.error(err.message)
-      throw err
+      console.error(err)
+      m.reply(msg.error)
     }
   }
 }
