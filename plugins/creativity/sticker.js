@@ -25,8 +25,8 @@ export const run = {
       const media = await msg.download()
 
       await sock.sendSticker(m.chat, media, {
-        packname: config.sticker.packname || '',
-        author: config.sticker.author || '',
+        packname: sticker.packname || '',
+        author: sticker.author || '',
         ai: true,
         quoted: m
       })
