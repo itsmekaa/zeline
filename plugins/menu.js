@@ -1,3 +1,4 @@
+import { jidDecode } from 'baileys'
 import moment from 'moment-timezone'
 import pkg from '../package.json'
 with {
@@ -27,7 +28,7 @@ export const run = {
 
         const time = moment().tz(tz).format('HH:mm:ss')
 
-        let caption = `Hi @${m.sender.split('@')[0]} !\n\n`
+        let caption = `Hi @${jidDecode(m.sender)?.user || m.sender} !\n\n`
         caption += '`Bot Information`\n'
         caption += `- *Name*: ${pkg.name}\n`
         caption += `- *Prefix*: ${prefix.join(' · ')}\n`
@@ -35,7 +36,7 @@ export const run = {
 
         caption += '`User Information`\n'
         caption += `- *Name*: ${m.pushName}\n`
-        caption += `- *Number*: ${m.sender.split('@')[0]}\n`
+        caption += `- *Number*: ${jidDecode(m.sender)?.user || m.sender}\n`
         caption += `- *Status*: ${m.isOwner ? 'Owner' : 'Free User'}\n\n`
 
         for (const cat of Object.keys(categories).sort()) {

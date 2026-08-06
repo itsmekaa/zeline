@@ -1,3 +1,5 @@
+import { jidDecode } from 'baileys'
+
 export const notify = async (sock, data, db) => {
   const { id, participants, action, subject } = data
 
@@ -19,7 +21,7 @@ export const notify = async (sock, data, db) => {
 
   for (const participant of participants) {
     const mention = participant.phoneNumber
-    const username = mention.split('@')[0]
+    const username = jidDecode(mention)?.user || mention
 
     let text = ''
 
